@@ -1,0 +1,447 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blocks>
+  <block id="ad91d6e1b981614b514c3c61b0ee65d6" category="summary">适用于Amazon FSx上虚拟机的BlueXP备份和恢复。</block>
+  <block id="33d898814cf484610ac330ca02a84bf1" category="doc">适用于VM的BlueXP备份和恢复文档</block>
+  <block id="63fd03a49eb1b8cee419487f40c1c640" category="summary">在备份或还原VM之前、您必须添加"Amazon FSx for NetApp ONTAP "或"Amazon FSx for NetApp ONTAP SVM"作为存储系统。通过添加存储、VM的BlueXP备份和恢复功能可以识别和管理vCenter中的备份和还原操作。</block>
+  <block id="6888e60d18ef291e7b86bc7e530fe2a8" category="doc">添加存储</block>
+  <block id="135b308ed83c53f1516b7c754566d1c4" category="paragraph-title">开始之前</block>
+  <block id="11db09e52e3f95807370d6474395dd1d" category="paragraph">ESXi服务器、VM的BlueXP备份和恢复以及每个vCenter必须同步到同一时间。如果您尝试添加存储，但 vCenter 的时间设置未同步，则此操作可能会失败并显示 Java 证书错误。</block>
+  <block id="bbe48fb854ea022537208eeeff822f91" category="paragraph-title">关于此任务</block>
+  <block id="84628fc1d27c48d8dcd6599f4df80303" category="paragraph">适用于VM的BlueXP备份和恢复可在直接连接的Storage VM和存储集群中的Storage VM上执行备份和还原操作。</block>
+  <block id="1854db6915a69cc8e0521d1b8e0933e6" category="list-text">Storage VM 的名称必须解析为管理 LIF 。</block>
+  <block id="348417f253bbf297603d548c58260619" category="paragraph">如果您在VM的BlueXP备份和恢复中为Storage VM名称添加了其他主机条目、则必须验证它们是否也可从虚拟设备进行解决。</block>
+  <block id="5e89455802b490325e8b5de5d2e292f0" category="paragraph">如果您添加的 Storage VM 名称无法解析为管理 LIF ，则计划的备份作业将失败，因为此插件无法发现此 Storage VM 上的任何数据存储库或卷。如果发生这种情况、请将此Storage VM添加到VM的BlueXP备份和恢复中并指定管理LIF、或者添加包含此Storage VM的集群并指定集群管理LIF。</block>
+  <block id="21b98222ac31571d620d0f173e2dc390" category="list-text">存储身份验证详细信息不会在VM的多个BlueXP备份和恢复实例之间共享、也不会在vCenter上的Windows SnapCenter Server和VM的BlueXP备份和恢复实例之间共享。</block>
+  <block id="f3a29486bed19a90f2da6d007818b427" category="list-title">步骤</block>
+  <block id="f97c1a1d745c01091fed7d45a3c6e8d1" category="list-text">在vSphere客户端的左侧导航器窗格中、单击*存储系统*。</block>
+  <block id="5eb6024701b8aff71a94567d88cbcfaf" category="list-text">在存储系统页面上，单击*Add*。</block>
+  <block id="d41d8cd98f00b204e9800998ecf8427e" category="inline-image-macro"></block>
+  <block id="4538d237be8cb4764e12c71d417cddb2" category="paragraph"><block ref="4538d237be8cb4764e12c71d417cddb2" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="82a67865bc4fe175c8c93e77015108b9" category="list-text">在*添加存储系统*向导中，输入Storage VM或集群的基本信息。</block>
+  <block id="644127ba6378708209cd3cd7be726b74" category="list-text">选择*凭据*身份验证方法并以Amazon FSx管理员身份登录。</block>
+  <block id="7dee7e783d13b6d5d415926ce0bfc306" category="list-text">单击 * 添加 * 。</block>
+  <block id="68db6c72e1ca65960795aee487114a61" category="paragraph">如果添加了存储集群，则会自动添加该集群中的所有 Storage VM 。自动添加的 Storage VM （有时称为 " 隐式 " Storage VM ）会显示在集群摘要页面上，并使用连字符（ - ）而非用户名。只有显式存储实体才会显示用户名。</block>
+  <block id="20dbe7e0dd0012ef2ae377097de8cdd8" category="summary">在对VM使用BlueXP备份和恢复来备份VM和数据存储库之前、您必须先创建备份策略。</block>
+  <block id="8e76505b54822d8003db9695ebc8dded" category="doc">为 VM 和数据存储库创建备份策略</block>
+  <block id="271beae8f11b01c3f45767fc1bd5c1a9" category="list-text">您必须已阅读前提条件。</block>
+  <block id="020c68712d58d0c6ae79d6422851ae45" category="list-text">您必须已配置二级存储关系。</block>
+  <block id="06e3c2a5372f8d3d86877d169badf325" category="list-text">如果要将 Snapshot 副本复制到镜像或存储二级存储，则必须配置关系，并且 SnapCenter 管理员必须已为源卷和目标卷分配 Storage VM 。</block>
+  <block id="fe693831347b037af8a5d8babd163c2e" category="list-text">要在NFS数据存储库上成功将Snapshot副本传输到二级存储以建立Version-FlexithleMirror关系、请确保SnapMirror策略类型为异步镜像、并已选中"all_ssource_SnapMirror"选项。</block>
+  <block id="b3f67a94ed7b9ba31bd2698489179f27" category="list-text">当二级存储(镜像存储)上的Snapshot副本数量达到最大限制时、在备份操作中注册备份并应用保留的活动将失败、并显示以下错误：此Snapshot副本当前正由一个或多个SnapMirror关系用作参考Snapshot副本。删除Snapshot副本可能会使发生原因未来的SnapMirror操作失败。</block>
+  <block id="7cb7ec638ee3f628b5dd7b29b735054f" category="paragraph">要更正此问题描述，请为二级存储配置 SnapMirror 保留策略，以避免达到 Snapshot 副本的最大限制。</block>
+  <block id="afb53cfa3120d45d1a3d76236dda1012" category="list-text">如果您希望进行VM一致的备份、则必须安装并运行VMware工具。需要使用VMware工具来使VM处于静噪状态。</block>
+  <block id="1b29ba4e6cf39ab8317f76076c2baeed" category="list-text">在虚拟机BlueXP备份和恢复的左侧导航器窗格中、单击*策略*。</block>
+  <block id="2be9030b1634912139eaab40b3092dce" category="list-text">在*Policies*页上，单击*Cree*启动向导。
+<block ref="906916a1f3ea00481784d2dcf7dafe3d" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="f9537d47a4839ca02a4ca9726157e701" category="list-text">在*新备份策略*页面上、选择AWS上要使用此策略的VMC、然后输入策略名称和问题描述。</block>
+  <block id="9efc9e0c08da510b5195bb9dc4b1b7c2" category="list-text">不支持的字符</block>
+  <block id="69a02b2d668a0ebee1d9ac100a00074c" category="paragraph">请勿在虚拟机，数据存储库，集群，策略，备份， 或资源组名称： % &amp; * $ # @ ！\ / ： * ？" &lt; &gt;-| ； " ，。</block>
+  <block id="9269e051e7bd31dcb56553a7f11183a2" category="paragraph">允许使用下划线字符（ _ ）。
+<block ref="6648fd21234a7ed16d280775be5d73d3" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="a923c6bf503ee78e9fc4b4479248cff6" category="list-text">指定保留设置。</block>
+  <block id="2eff7650afc7423cc6df7c21eaaf0430" category="paragraph">如果计划启用 SnapVault 复制，则应将保留数量设置为 2 个或更多备份。如果将保留计数设置为 1 个要保留的备份，则保留操作可能会失败。这是因为在将较新的 Snapshot 副本复制到目标之前，第一个 Snapshot 副本是 SnapVault 关系的参考 Snapshot 副本。</block>
+  <block id="6e0b19728555d1c2b7bc98ce7895aced" category="list-text">指定频率设置。</block>
+  <block id="52b19e85e6a29b6fe5690f47944f859f" category="paragraph">此策略仅指定备份频率。用于备份的特定保护计划在资源组中定义。因此，两个或更多资源组可以共享相同的策略和备份频率，但备份计划不同。</block>
+  <block id="352857d99c458903c7aae23409a114d5" category="list-text">在 * 复制 * 字段中，指定复制到二级存储的类型，如下表所示：</block>
+  <block id="ca992da0d36b851405bbef3bf1544e14" category="cell">对于此字段…</block>
+  <block id="aeb7716438e30f2a23e6f50ba16352b4" category="cell">执行此操作…</block>
+  <block id="fa23470db7b9905492d6e4cdd14b03e5" category="paragraph">备份后更新 SnapMirror</block>
+  <block id="a7352564cfc3174fc18763ada4c4e33e" category="paragraph">选择此选项可在与主备份卷具有 SnapMirror 关系的另一个卷上创建备份集的镜像副本。
+如果卷配置了镜像 - 存储关系，则如果要将备份复制到镜像 - 存储目标，则只能选择 * 备份后更新 SnapVault * 选项。</block>
+  <block id="449ebe6b7b153c1de3b22c54152f11dd" category="paragraph">适用于 VMware vSphere 4.5 及更高版本的 SnapCenter 插件中的 FlexGroup 卷中的数据存储库支持此选项。</block>
+  <block id="05c92158f412c4a911e0b21a09762bf2" category="paragraph">备份后更新 SnapVault</block>
+  <block id="7f7a2015d521bd1848a92d266cd3fae5" category="paragraph">选择此选项可在与主备份卷具有 SnapVault 关系的另一个卷上执行磁盘到磁盘备份复制。</block>
+  <block id="ec9a0601ee927cc668ce79eac801b520" category="paragraph">如果为卷配置了镜像 - 存储关系，则只有在需要将备份复制到镜像 - 存储目标时，才必须选择此选项。</block>
+  <block id="765c798c0aa1aec3ca7ca68ec68f7e28" category="paragraph">Snapshot 标签</block>
+  <block id="b96b0586842e6c7544966f830118b637" category="paragraph">输入要添加到使用此策略创建的 SnapVault 和 SnapMirror Snapshot 副本的可选自定义标签。
+Snapshot 标签有助于将使用此策略创建的快照与二级存储系统上的其他快照区分开。</block>
+  <block id="97b7176ff6062e6fac08db2a54668272" category="paragraph">Snapshot 副本标签最多允许包含 31 个字符。</block>
+  <block id="3c470c222c149a078de44686443ab4cf" category="list-text">*可选*：在高级字段中，选择所需的字段。下表列出了高级字段详细信息。</block>
+  <block id="a7ef08fff5cdd9899a1574f69f5c4428" category="paragraph">虚拟机一致性</block>
+  <block id="c5622748b0dae394073783566c4253de" category="paragraph">选中此框可在每次运行备份作业时暂停 VM 并创建 VMware 快照。</block>
+  <block id="5fe139943a50a82fa435d79d3988038a" category="paragraph">要执行虚拟机一致的备份、必须在虚拟机上运行VMware工具。如果 VMware Tools 未运行，则会执行崩溃状态一致的备份。</block>
+  <block id="d619892da7c9e176ad3a4bb3414fcef1" category="paragraph">选中 VM 一致性复选框后，备份操作可能需要更长时间并需要更多存储空间。在这种情况下， VM 会先暂停，然后 VMware 执行 VM 一致的快照，然后 SnapCenter 执行其备份操作，最后恢复 VM 操作。</block>
+  <block id="fe8e8bb4e4841e4b613a335eb4397fa6" category="paragraph">VM 子系统内存不包括在 VM 一致性 Snapshot 中。</block>
+  <block id="5b5f807a09f098321a7b30d765219c05" category="paragraph">包括具有独立磁盘的数据存储库</block>
+  <block id="495ad64d2a6a40cfac27d689d4edd34b" category="paragraph">选中此框可在备份中包含包含临时数据的任何具有独立磁盘的数据存储库。</block>
+  <block id="a83f1ca5ad00b39773d9e6a26b0e70b2" category="paragraph">脚本</block>
+  <block id="38e0c62f029f528b565802759f84d383" category="paragraph">输入希望 SnapCenter VMware 插件在备份操作前后运行的预处理程序或后脚本的完全限定路径。例如，您可以运行脚本来更新 SNMP 陷阱，自动执行警报和发送日志。执行脚本时会验证脚本路径。</block>
+  <block id="7e3f0e5af0f3deb2b599c2b06c202c37" category="paragraph">预处理脚本和后处理脚本必须位于虚拟设备虚拟机上。要输入多个脚本、请在每个脚本路径后按Enter键、以便在单独的行中列出每个脚本。不允许使用字符 " ； " 。</block>
+  <block id="0e966e38f37db4fe0a9b1d6f014e044c" category="paragraph">您可以通过在策略页面中选择策略来验证是否已创建策略并查看策略配置。</block>
+  <block id="0a5120b477a12d0b58555a4a46c5269c" category="summary">不支持的工作流</block>
+  <block id="9a2e882799cd282a6f2f040bce700bee" category="paragraph">适用于VM 1.0的BlueXP备份和恢复不支持以下工作流：</block>
+  <block id="10cbe957e96580adb586e243ca93b19f" category="list-text">连接和断开 VMDK</block>
+  <block id="839409625f4f63a1b0569b87b727b253" category="list-text">挂载和卸载数据存储库</block>
+  <block id="6d74a680eadd149117f584cf67b83c34" category="list-text">还原子系统文件和文件夹</block>
+  <block id="e3ce20e84d792df542d9625df767d605" category="list-text">还原到备用位置</block>
+  <block id="b3559f665aa2ce07e02e3a58d4dbcc1c" category="list-text">使用"证书"身份验证方法添加存储系统</block>
+  <block id="ec2690fa612571dacaeedc2cc2bb4fb6" category="list-text">添加NetApp ONTAP FlexGroup卷</block>
+  <block id="e81fe1cc9509490f8ba5ec5636cb754e" category="summary">要保护虚拟机上的VM、数据存储库和应用程序一致的数据库、您必须为VM部署BlueXP备份和恢复。</block>
+  <block id="4af3639e7f4fffc8b4fcc219b968cc03" category="doc">为VM部署BlueXP备份和恢复</block>
+  <block id="70a3b011bedc6fad937d187700969443" category="paragraph">++++</block>
+  <block id="8fd291ad60a03fee9a1ee7e664474efb" category="paragraph">VMware vCenter 8.0及更高版本支持OVA部署。</block>
+  <block id="d59a15e753c2787c0b1006e6c681e3d8" category="list-text">您必须已阅读部署要求。</block>
+  <block id="a9760771f4dac75a237b0b95e23b2804" category="list-text">您必须在AWS上运行受支持的VMC版本。</block>
+  <block id="b778ffe29ad16f2f9fea1b78e3afde09" category="list-text">您必须已在AWS环境上配置和设置VMC。</block>
+  <block id="af385a0f60b4b8d21fb7da3e73bc1601" category="list-text">您必须已设置ESXi主机、以便为VM执行BlueXP备份和恢复。</block>
+  <block id="91e9d3a887ef8fe897c7d2db6b95249f" category="list-text">您必须已下载VM的BlueXP备份和恢复<block ref="58963a595c988dc6f693cb3238dc907a" prefix=" " category="inline-code"></block> 文件</block>
+  <block id="95ff0b130af729d4a1d7d76be6a9f1ef" category="list-text">您必须知道AWS上的VMC实例的登录身份验证详细信息。</block>
+  <block id="1ac228dd82997c534998d8c776a81009" category="list-text">您必须拥有一个包含有效公共密钥和专用密钥文件的证书。有关详细信息、请参见存储证书管理一节下的文章。</block>
+  <block id="78dd2db401a1c567e4094c34da3d53e3" category="list-text">您必须已注销并关闭vSphere客户端的所有浏览器会话、并删除浏览器缓存、以避免在为VM部署BlueXP备份和恢复期间出现任何浏览器缓存问题描述。</block>
+  <block id="8ba7fa3d7ed705b172a2802a36085538" category="list-text">您必须已在 vCenter 中启用传输层安全（ TLS ）。请参见 VMware 文档。</block>
+  <block id="d706d30254764a674cce32eb658463b4" category="paragraph">在与vCenter相同的时区为VM部署BlueXP备份和恢复。</block>
+  <block id="60fef4f382ecd40d07aa6f5d88accaa7" category="list-text">对于VMware vCenter 7.0.3及更高版本、请按照下载开放式虚拟设备(OVA)一节中的步骤将证书导入到vCenter中。</block>
+  <block id="9e6343514537d0d6a99bafe616c5aa86" category="list-text">在浏览器中，导航到 VMware vSphere vCenter 。</block>
+  <block id="a5bc2dcdf45e4e981e8c5477447aa605" category="list-text">登录到* VMware vCenter单点登录页面*。</block>
+  <block id="ad4893b9eae679e233b663b06f44d8af" category="list-text">在导航器窗格中，右键单击作为虚拟机的有效父对象的任何清单对象，例如数据中心，集群或主机，然后选择 * 部署 OVF 模板 * 以启动 VMware Deploy 向导。</block>
+  <block id="17b94924b62d3d2218aa4d42b17aa068" category="list-text">提取<block ref="58963a595c988dc6f693cb3238dc907a" prefix=" " category="inline-code"></block> 文件、其中包含<block ref="8d8b01a4d628953e7a2225813c8edb3f" prefix=" " category="inline-code"></block> 文件。在*选择OVF模板*页面上、指定的位置<block ref="8d8b01a4d628953e7a2225813c8edb3f" prefix=" " category="inline-code"></block> 文件<block ref="58963a595c988dc6f693cb3238dc907a" prefix=" " category="inline-code"></block> 已提取文件夹。</block>
+  <block id="5a378b18f7bf0c4cabc6c655cd2f535e" category="list-text">单击 * 下一步 * 。</block>
+  <block id="796f03d0e85998488ac1646dc2223f74" category="list-text">在 * 选择名称和文件夹 * 页面上，输入虚拟机或 vApp 的唯一名称，并选择部署位置，然后单击 * 下一步 * 。</block>
+  <block id="120eae940d81b5db30f7ab4bb98355e0" category="paragraph">此步骤指定导入位置<block ref="8d8b01a4d628953e7a2225813c8edb3f" prefix=" " category="inline-code"></block> 文件到vCenter中。虚拟机的默认名称与选定的名称相同<block ref="8d8b01a4d628953e7a2225813c8edb3f" prefix=" " category="inline-code"></block> 文件如果更改默认名称、请选择一个在AWS VM上的每个VMC文件夹中唯一的名称。</block>
+  <block id="610a764205314eed9d2cb112d7d4fe17" category="paragraph">VM 的默认部署位置是启动向导的清单对象。</block>
+  <block id="fd38bfaa138a173dbe8f06d29d48ca2d" category="list-text">在 * 选择资源 * 页面上，选择要运行已部署 VM 模板的资源，然后单击 * 下一步 * 。</block>
+  <block id="e3e1c25431fc2379a565e59898f94d07" category="list-text">在*查看详细信息*页面上、验证<block ref="8d8b01a4d628953e7a2225813c8edb3f" prefix=" " category="inline-code"></block> 模板详细信息、然后单击*下一步*。</block>
+  <block id="636c2e0b88f6a682d77d3838726c2fe8" category="list-text">在 * 许可协议 * 页面上，选中 * 我接受所有许可协议 * 复选框。</block>
+  <block id="703b009db2355e8887ba2886f86ab2ec" category="list-text">在 * 选择存储 * 页面上，定义为已部署的 OVF 模板存储文件的位置和方式。</block>
+  <block id="55cce6bfbb9d17ae1682863fc7a7764b" category="list-text">选择 VMDK 的磁盘格式。</block>
+  <block id="7a9c01639c2cc1523a8c14bd0e5ba33f" category="list-text">选择 VM 存储策略。</block>
+  <block id="a7d21e52dac9a32dd6c0969d21e58f5d" category="paragraph">只有在目标资源上启用了存储策略时，此选项才可用。</block>
+  <block id="641242495bc9253884a3edaa25cef822" category="list-text">选择一个数据存储库以存储已部署的 OVA 模板。</block>
+  <block id="81deefee239e2e910af613e15d3fa5b0" category="paragraph">配置文件和虚拟磁盘文件存储在数据存储库中。</block>
+  <block id="cf76b59c919d783c77b9e239f7f36a14" category="paragraph">选择一个足以容纳虚拟机或 vApp 以及所有关联虚拟磁盘文件的数据存储库。</block>
+  <block id="19a2f9999bcfa76b2522efb93c48ee86" category="list-text">在 * 选择网络 * 页面上，执行以下操作：</block>
+  <block id="ac072e04e003db352f1a51a7bc9b9b18" category="list-text">选择一个源网络并将其映射到一个目标网络。</block>
+  <block id="651433d5ff599464dd5066cb3156dbf0" category="paragraph">源网络列列出了 OVA 模板中定义的所有网络。</block>
+  <block id="990373fb1cc25af464a0001313f19108" category="list-text">在 * IP 分配设置 * 部分中，选择所需的 IP 协议，然后单击 * 下一步 * 。</block>
+  <block id="e46e129eba07eb4b5e649d1e0e8705fe" category="paragraph">VM的BlueXP备份和恢复支持一个网络接口。如果需要多个网络适配器，则必须手动设置。</block>
+  <block id="a3597cfbbc7bac1face6663ca7cee56f" category="list-text">在 * 自定义模板 * 页面上，执行以下操作：</block>
+  <block id="0872cc2ae5ee51207c594d63816e1c49" category="list-text">在 * 注册到现有 vCenter * 部分中，输入虚拟设备的 vCenter 名称和 vCenter 凭据。</block>
+  <block id="e83e36675303176d60875dba6e6a988c" category="paragraph">在* vCenter用户名*字段中、以"域\用户名"格式输入用户名。</block>
+  <block id="587c874122378eff1aa1b51ab4413eaa" category="list-text">在*为VM凭据创建BlueXP备份和恢复*部分中、输入本地凭据。</block>
+  <block id="a8b8a57e48b9ffeadf52134384793930" category="paragraph">在 * 用户名 * 字段中，输入本地用户名；不包括域详细信息。</block>
+  <block id="84d178a3dbd52098e70956614b4f030b" category="paragraph">记下您指定的用户名和密码。如果要稍后修改适用于VM的BlueXP备份和恢复配置、则需要使用这些凭据。</block>
+  <block id="61a8dab3f6aedb51e104e8b3324b04ea" category="list-text">输入maint用户的凭据。</block>
+  <block id="77f6de55ef0f900f6cca67ff3c69430b" category="list-text">在 * 设置网络属性 * 中，输入主机名。</block>
+  <block id="3fa10b976d2e272f29933ad742d95ea9" category="list-text">在 * 设置 IPv4 网络属性 * 部分中，输入网络信息，例如 IPv4 地址， IPv4 网络掩码， IPv4 网关， IPv4 主 DNS ， IPv4 二级 DNS ， 和 IPv4 搜索域。</block>
+  <block id="7f4ea10911b506f2fd2ecf8e410345db" category="paragraph">如果要继续使用DHCP作为网络配置、可以跳过这些步骤、并将设置网络属性部分中的条目留空。</block>
+  <block id="71f9ed6b3799a05b8e015c69367cfb37" category="list-text">在 * 设置日期和时间 * 中，选择 vCenter 所在的时区。</block>
+  <block id="e69d6a911676da089c14c8e8f2935510" category="list-text">在 * 准备完成 * 页面上，查看此页面并单击 * 完成 * 。</block>
+  <block id="e60fd866a673df28143ec78f1ec5e5c6" category="paragraph">所有主机都必须配置 IP 地址（不支持 FQDN 主机名）。在部署之前， Deploy 操作不会验证您的输入。</block>
+  <block id="76785e5d8d7ceebbb25a3306d19d777e" category="paragraph">在等待 OVF 导入和部署任务完成时，您可以从 " 近期任务 " 窗口查看部署进度。</block>
+  <block id="dfb68bf37d310949aa0dd64d78a8d9dc" category="paragraph">成功为VM部署BlueXP备份和恢复后、该VM将部署为Linux VM、并注册到vCenter中、然后安装VMware vSphere客户端。</block>
+  <block id="8e12e468dd8f437d0dc73169b5256571" category="list-text">导航到部署了虚拟机BlueXP备份和恢复的虚拟机，单击*摘要*选项卡，然后单击*开机*框启动虚拟设备。</block>
+  <block id="463df4afa807689644efac592f3dfbe4" category="list-text">启动虚拟机的BlueXP备份和恢复时，右键单击为虚拟机部署的BlueXP备份和恢复，选择*子操作系统*，然后单击*安装VMware工具*。</block>
+  <block id="30d965eef5ba25c6b9998ae38270b43e" category="doc">法律声明</block>
+  <block id="e9c44bbfd795a5d63d74c6a77afee70d" category="paragraph">法律声明提供对版权声明、商标、专利等的访问。</block>
+  <block id="6016a2b341113bf496b719905398ecd2" category="section-title">版权</block>
+  <block id="09e95b77ffe81fe465a83ba99efad5c8" category="paragraph"><block ref="09e95b77ffe81fe465a83ba99efad5c8" category="inline-link-rx"></block></block>
+  <block id="126a02652da6de02962cf1b654fd6376" category="section-title">商标</block>
+  <block id="c4ce4761e466527d26b3e3d5ed1006fd" category="paragraph">NetApp 、 NetApp 徽标和 NetApp 商标页面上列出的标记是 NetApp 、 Inc. 的商标。其他公司和产品名称可能是其各自所有者的商标。</block>
+  <block id="7aa531e9acfe2b98e34d2c92fe9846ff" category="paragraph"><block ref="7aa531e9acfe2b98e34d2c92fe9846ff" category="inline-link-rx"></block></block>
+  <block id="be89498d2f8a22ce47c02ba9795fe2af" category="section-title">专利</block>
+  <block id="d0b19d36be2c5f16e9aef46c8a452d3d" category="paragraph">有关 NetApp 拥有的专利的最新列表，请访问：</block>
+  <block id="d7f1fbcf9ce4e42f705add574d262b2c" category="paragraph"><block ref="d7f1fbcf9ce4e42f705add574d262b2c" category="inline-link-rx"></block></block>
+  <block id="56c34c6410dd45c5cec44149ad0ce037" category="section-title">隐私政策</block>
+  <block id="fc248f74f5e36542f7f5627b8610e9a3" category="paragraph"><block ref="fc248f74f5e36542f7f5627b8610e9a3" category="inline-link-rx"></block></block>
+  <block id="c0227cef6f07a8cd2ac72f2945b031aa" category="section-title">开放源代码</block>
+  <block id="9b73989307c1975dfa4d5e1581e4afe8" category="paragraph">通知文件提供有关 NetApp 软件中使用的第三方版权和许可证的信息。</block>
+  <block id="1dbd69173905cff968e81a32823f8f1e" category="summary">备份操作对资源组中定义的所有资源执行。如果资源组附加了策略并配置了计划，则会根据计划自动进行备份。</block>
+  <block id="78d2a696f9b9f71eb637f30f0020bdbf" category="doc">按需备份资源组</block>
+  <block id="92ae04a417b2b1bf95cb914953f21cce" category="list-text">您必须已创建附加了策略的资源组。</block>
+  <block id="409609f378546af0c017cd18ffb05b2c" category="paragraph">当VM MySQL数据库的BlueXP备份和恢复作业已在运行时、请勿启动按需备份作业。使用维护控制台查看为 MySQL 数据库配置的备份计划。</block>
+  <block id="8df70f643740e0e6be25c9e73f9347ae" category="list-text">在vCenter Web Client页面的左侧导航器窗格中、单击menu：适用于VM[资源组]的BlueXP备份和恢复、然后选择一个资源组、再单击*立即运行*以启动备份。</block>
+  <block id="d88005c65b58055629310a63a4557fca" category="paragraph"><block ref="d88005c65b58055629310a63a4557fca" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="dee1b58674283aa778714d7ecc9e0d92" category="list-text">如果资源组配置了多个策略、则在立即备份对话框中、选择要用于此备份操作的策略。</block>
+  <block id="bb7ace492245c1393f1fa7650b5650f0" category="list-text">单击 * 确定 * 以启动备份。</block>
+  <block id="634fce580f751c41e854d8f1772f2396" category="list-text">如果对备份中的任何虚拟机执行静用操作失败、则备份完成时会显示警告、并标记为虚拟机不一致、即使选定策略已选择虚拟机一致性也是如此。在这种情况下、某些虚拟机可能已成功静机。在作业监控器中、故障虚拟机详细信息会将"quiose."显示为"failed。</block>
+  <block id="3e40b4a74f48e508b0fa469b70fe41b2" category="summary">资源组是要保护的虚拟机和数据存储库的容器。</block>
+  <block id="020a36deb114af1bb518c70d5975e940" category="doc">创建资源组</block>
+  <block id="74c107d9bc0e07de1820c4ccac80a5bf" category="paragraph">对于所有资源组、请勿添加处于不可访问状态的虚拟机。虽然可以创建包含不可访问的虚拟机的资源组、但该资源组的备份将失败。</block>
+  <block id="9cce6f26b63d9eb5d76faeab404389aa" category="paragraph">您可以随时在资源组中添加或删除资源。</block>
+  <block id="52fb0b971147f2d50f41f8affa7cbf5e" category="list-text">备份单个资源</block>
+  <block id="05ef45af9b0644fd461b58511351eb5e" category="paragraph">要备份单个资源(例如单个虚拟机)、必须创建一个包含该资源的资源组。</block>
+  <block id="b23ab74a5da8a9fa670a771dd846d06e" category="list-text">备份多个资源</block>
+  <block id="67a4acd21e837a9ee8a39c0bb84101d1" category="paragraph">要备份多个资源，您必须创建一个包含多个资源的资源组。</block>
+  <block id="a5fc7fce0f281a94273520624de03c38" category="list-text">优化 Snapshot 副本</block>
+  <block id="b861f2c51917fb8a88656ddcb6fd1ca4" category="paragraph">要优化Snapshot副本、应将与同一卷关联的虚拟机和数据存储库分组到一个资源组中。</block>
+  <block id="9f02509e5496e861df4c341dba05386e" category="list-text">备份策略</block>
+  <block id="ab4c9d1e2eb92442c5b3ece6aa2c0278" category="paragraph">虽然可以在没有备份策略的情况下创建资源组，但只有在至少有一个策略附加到资源组时，才能执行计划的数据保护操作。您可以使用现有策略，也可以在创建资源组时创建新策略。</block>
+  <block id="4360fc5d869bf831be60cbb2a380170e" category="list-text">兼容性检查</block>
+  <block id="f99994df955a095a325d081acb02d60a" category="paragraph">在创建资源组时、适用于VM的BlueXP备份和恢复会执行兼容性检查。不兼容的原因可能是：</block>
+  <block id="07996c2123551c418aad1f80ac1278e7" category="list-text">VMDK位于不受支持的存储上。</block>
+  <block id="f3c698429326d1c3e24ca05da7a4c5da" category="list-text">共享PCI设备连接到虚拟机。</block>
+  <block id="77ec02d8115ae8f8baf51a69ba3e38e2" category="list-text">在虚拟机BlueXP备份和恢复的左侧导航器窗格中，单击*Resource Groups*。</block>
+  <block id="bef331d16c5d9ba4f0a20c154762ab39" category="list-text">在*Resource Groups*页上，单击*Cree*以启动向导。</block>
+  <block id="fb588da7b4a1c9d0902343b377823fdc" category="paragraph"><block ref="fb588da7b4a1c9d0902343b377823fdc" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="cdff6161a900ecd68dd60624c62896af" category="paragraph">这是创建资源组的最简单方法。但是，您也可以通过执行以下操作之一来创建包含一个资源的资源组：</block>
+  <block id="70fab5d9a0c00a6355f6fe5d96929ee9" category="list-text">要为一个虚拟机创建资源组，请单击菜单：[主机和群集]，然后右键单击一个虚拟机，选择适用于虚拟机的BlueXP备份和恢复，然后单击*Create*。</block>
+  <block id="6659300612a814c55e5e4a0ab3381c7a" category="list-text">要为一个数据存储库创建资源组、请单击菜单：菜单[主机和群集]、然后右键单击某个数据存储库、选择适用于VM的BlueXP备份和恢复、然后单击*创建*。</block>
+  <block id="f1410de57632101f52f16d7d6c306025" category="list-text">在向导的*常规信息和通知*页上，输入所需的值。</block>
+  <block id="2b2620f1962d78eb23f6f754d96e6546" category="list-text">在 * 资源 * 页面上，执行以下操作：</block>
+  <block id="5d113f2038d289f391614c39043629e8" category="paragraph">范围</block>
+  <block id="ddc3f02ab84de97f0abdafefdb87394f" category="paragraph">选择要保护的资源类型：</block>
+  <block id="eff845e03ea7f765e5646b3de0aa3188" category="list-text">数据存储库</block>
+  <block id="76b0fa668c1cd016096eb9bc1bfde44a" category="list-text">虚拟机</block>
+  <block id="615707baa418ce315e44ac2a5d6164af" category="paragraph">数据中心</block>
+  <block id="94936dc19126e0203fd5c47b7e05428b" category="paragraph">导航到虚拟机或数据存储库</block>
+  <block id="4c928d1c171b7d62d8f758ffa689710f" category="paragraph">可用实体</block>
+  <block id="9b8a9a84d677934089901b3496c6b38f" category="paragraph">选择要保护的资源，然后单击&gt;将所做的选择移动到选定实体列表中</block>
+  <block id="c4d7d69f23fe0a7e621b08dfa824512e" category="paragraph">当您单击*下一步*时，系统首先检查的BlueXP备份和恢复是否管理并与选定资源所在的存储兼容。</block>
+  <block id="3242a164ddcaa9a72988c3af2bc007f4" category="paragraph">如果显示消息Selected &lt;resource-name&gt; is not BlueXP backup and recovery for VMs COMPATIBLE、则表示选定资源与适用于VM的BlueXP备份和恢复不兼容。</block>
+  <block id="62307e34d22f9c73f798fb198882b14e" category="list-text">在*生成磁盘*页面上，为在多个数据存储库中具有多个VMDK的虚拟机选择一个选项：</block>
+  <block id="fe83ca3448603607d6f63f28881e4f36" category="list-text">始终排除所有跨区数据存储库（这是数据存储库的默认设置）。</block>
+  <block id="aa41470a97a21d65eb54e46243538102" category="list-text">始终包括所有跨区数据存储库[这是虚拟机的默认设置。]</block>
+  <block id="75742d049e48e4760129323eb0e54d8d" category="list-text">手动选择要包含的跨区数据存储库。</block>
+  <block id="3210952a5fb8d5ccfeba07ae678f1775" category="list-text">在 * 策略 * 页面上，选择或创建一个或多个备份策略，如下表所示：</block>
+  <block id="2cdd19659310fc48844c26aedc8fd9a4" category="cell">使用…</block>
+  <block id="6059ad69090f1a7b85ee31e84e827f9c" category="paragraph">现有策略</block>
+  <block id="5e8922fe6b33e53144f78b8592674a6c" category="paragraph">从列表中选择一个或多个策略。</block>
+  <block id="9c5b7358395094126cc2831e0ded69a9" category="paragraph">新策略</block>
+  <block id="f2a42a68e067e481d094b018459ef895" category="list-text">单击 * 创建 * 。</block>
+  <block id="fd9ca72572d4ab5e600c85b32f8a9e6a" category="list-text">完成新建备份策略向导以返回到创建资源组向导。</block>
+  <block id="5049311e411f306df5ef01765b9dc8ec" category="list-text">在 * 计划 * 页面上，为每个选定策略配置备份计划。</block>
+  <block id="d1bdd68846c0836400eff9ed1186b9d5" category="paragraph">在起始小时字段中，输入一个非零的日期和时间。日期格式必须为"日/月/年"。您必须填写每个字段。适用于VM的BlueXP备份和恢复会在部署适用于VM的BlueXP备份和恢复的时区创建计划。您可以使用适用于VM的BlueXP备份和恢复图形用户界面来修改时区。</block>
+  <block id="c2e579bbd89fc3c371008f0c4ea04967" category="paragraph"><block ref="c2e579bbd89fc3c371008f0c4ea04967" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="e35e0852d8b258c1262911fcef9235fc" category="list-text">查看*摘要*，然后单击*完成*。</block>
+  <block id="e0537e9cf2e3b46fd54c91b2d3951630" category="paragraph">在单击完成之前、您可以返回向导中的任何页面并更改相关信息。</block>
+  <block id="5c8ec5161ac5fb9e56619ce4ca7f6562" category="paragraph">单击“完成”后，新资源组将添加到资源组列表中。</block>
+  <block id="08105970723024c1f3e2f1785730db79" category="paragraph">如果对备份中的任何虚拟机执行静用操作失败、则备份将标记为虚拟机不一致、即使所选策略已选择虚拟机一致性也是如此。在这种情况下、某些虚拟机可能已成功静机。</block>
+  <block id="f23ad563b3074aecc0e703cc5f05f6d3" category="summary">在对VM使用BlueXP备份和恢复之前、您需要了解一些要求和注意事项。</block>
+  <block id="e7d709a415f457e468d93ff7beb8afbf" category="doc">要求和注意事项</block>
+  <block id="5769193b786669c0ecafc3e705154789" category="paragraph">在对VM使用BlueXP备份和恢复之前、您需要了解以下几个要求和注意事项：</block>
+  <block id="b4b679d794e454844cd086d373906115" category="list-text">VM的BlueXP备份和恢复会作为Linux VM进行部署、而不管您是使用该插件来保护Windows系统还是Linux系统上的数据。</block>
+  <block id="0e462b074c170de3b3638ac2ed1afb3f" category="list-text">您应在AWS上的VMC上为VM部署BlueXP备份和恢复。</block>
+  <block id="ec89438f95afaf1236c073e8089c548e" category="paragraph">VM和VMC的BlueXP备份和恢复应使用相同的时区。备份计划在为VM部署BlueXP备份和恢复的时区执行。VMC按VMC所在时区报告数据。因此、如果VM和VMC的BlueXP备份和恢复位于不同时区、则"BlueXP VM备份和恢复信息板"中的数据可能与报告中的数据不同。</block>
+  <block id="195abd4b75057ce435ca652cb45c2a64" category="list-text">您不能在名称包含特殊字符的文件夹中为VM部署BlueXP备份和恢复。</block>
+  <block id="a7c99fa4270e567a328e88618380eaa4" category="paragraph">文件夹名称不应包含以下特殊字符： $ ！@ #%^ &amp; （） _+ ｛ ｝ ' ；， * ？ "&lt;&gt;</block>
+  <block id="2b70ce4cce0a6dc6a541ed9c851d419c" category="list-text">您必须为AWS上的每个VMC部署并注册一个单独的唯一BlueXP备份和恢复实例。</block>
+  <block id="8ced16f68a9710f544fa07b75b031531" category="list-text">AWS上的每个VMC都应与一个单独的适用于VM的BlueXP备份和恢复实例配对。</block>
+  <block id="a0b8712c405e33c495bcbf0f2430f84e" category="list-text">虚拟机的每个BlueXP备份和恢复实例都必须部署为一个单独的Linux虚拟机。</block>
+  <block id="25950cd6c2e7c3d5805a7155cfa39e2a" category="paragraph">例如、如果要从AWS上的六个不同VMC实例执行备份、则必须在六个主机上为VM实例部署六个BlueXP备份和恢复、并且AWS上的每个VMC都必须与一个唯一的VM BlueXP备份和恢复实例配对。</block>
+  <block id="2aa21a5ffa0dab32f9fd25622fcf534d" category="summary">适用于VM的BlueXP备份和恢复是一个独立的虚拟设备(开放式虚拟设备格式)、可为基于AWS的VMware Cloud和适用于NetApp ONTAP的Amazon FSx上的VM和数据存储库提供数据保护服务。您可以使用适用于VM的BlueXP备份和恢复功能备份数据存储库并将虚拟机还原到其原始位置。</block>
+  <block id="26a15d7986f1607a9f7daa4efd926c80" category="doc">适用于Amazon FSx上虚拟机的BlueXP备份和恢复</block>
+  <block id="f5eab3d317d6c4d95063c4bb5c161509" category="list-text">您只能在Amazon FSx上备份NFS类型的数据存储库。</block>
+  <block id="2efffbafe41056b8a16eaa739e9b56e7" category="list-text">要备份NFS数据存储库、您应运行ONTAP 9.10或更高版本。</block>
+  <block id="32b36f1d8e8c3d59e6463ae39985c79f" category="list-text">VMware Cloud具有预定义的"CloudAdmin"角色。CloudAdmin角色具有创建和管理SDDC工作负载以及存储策略、内容库、vSphere标记和资源池等相关对象所需的权限。</block>
+  <block id="94cc43cd13438a1a44297fe4d9e5a397" category="list-text">您可以将VM和VMDK还原到其当前位置(就地还原)。</block>
+  <block id="243263104c829e77835d632f591230d5" category="summary">在向NetApp技术支持部门创建支持案例之前、您需要向BlueXP添加一个NetApp 支持站点 帐户、然后注册获取支持。</block>
+  <block id="42748df9eaa0be17ddc5cc1593cf57ab" category="doc">注册以获得支持</block>
+  <block id="0c7db2bd63c891adb2c0fa4527805d72" category="paragraph">您的BlueXP帐户和各个Cloud Volumes ONTAP系统都需要注册支持。</block>
+  <block id="0b0e252af8897fbe981ec6682d2aa33b" category="section-title">支持注册概述</block>
+  <block id="192054ad7601240a3e8be54cc5cc548e" category="paragraph">激活支持授权有两种形式的注册：</block>
+  <block id="2322ca552c2b0ebe090c8485519246a8" category="list-text">注册您的BlueXP帐户ID支持订阅(您的20位960xxxxxxxxx序列号、位于BlueXP的支持资源页面上)。</block>
+  <block id="23fdcbefa6d9cd877be7ceb7a18bb936" category="paragraph">这是您在BlueXP中使用的任何服务的单一支持订阅ID。必须注册每个BlueXP帐户级别的支持订阅。</block>
+  <block id="55ff64467cd508971910145ab5d6b3b8" category="list-text">在云提供商的市场中注册与订阅关联的Cloud Volumes ONTAP 序列号(即20位909201xxxxxxxx序列号)。</block>
+  <block id="67dbdeb11e22ea7def810bade59ce818" category="paragraph">这些序列号通常称为_PAYGO序列号、并由BlueXP在部署Cloud Volumes ONTAP 时生成。</block>
+  <block id="28164bf9e881ddc9e7ff74744bfce180" category="paragraph">注册这两种类型的序列号可实现打开支持服务单和自动生成案例等功能。要完成注册、请按如下所述将NetApp 支持站点(NSS)帐户添加到BlueXP中。</block>
+  <block id="0375f4855be072c7d856a0233cc21de9" category="section-title">支持云提供商解决方案</block>
+  <block id="e922b9aa0836a1d93e11cac0fe4c9004" category="paragraph">有关以下云提供商解决方案的技术支持、请参阅该产品的BlueXP文档中的"获得帮助"。</block>
+  <block id="18cf072964a583150dd247485ba75b92" category="inline-link-macro">适用于 ONTAP 的 Amazon FSX</block>
+  <block id="9d06990508d25d367d9158c6558eb9c8" category="list-text"><block ref="9d06990508d25d367d9158c6558eb9c8" category="inline-link-macro-rx"></block></block>
+  <block id="7450cfde7058dc5e1f7909d0280fd7ae" category="inline-link-macro">Azure NetApp Files</block>
+  <block id="2e0c742f4616eb27b5b7646aa790edfe" category="list-text"><block ref="2e0c742f4616eb27b5b7646aa790edfe" category="inline-link-macro-rx"></block></block>
+  <block id="b0cee72642f5457a71ddd0b49efb6d93" category="inline-link-macro">适用于 Google Cloud 的 Cloud Volumes Service</block>
+  <block id="cf14bff66a8b72d3675db8ffe0f02ee3" category="list-text"><block ref="cf14bff66a8b72d3675db8ffe0f02ee3" category="inline-link-macro-rx"></block></block>
+  <block id="5a19febf1dcb23c10e8dcfde64ba764c" category="section-title">注册BlueXP帐户以获得NetApp支持</block>
+  <block id="6bbc2ba432f59ab65ee3d8ac5a58336e" category="paragraph">要注册支持并激活支持授权、BlueXP帐户中的一个用户必须将NetApp 支持站点 帐户与其BlueXP登录名关联。如何注册NetApp支持取决于您是否已拥有NetApp 支持站点 (NSS)帐户。</block>
+  <block id="bf4c731c0ee7f60c8018ad8f96828dda" category="section-title">具有NSS帐户的现有客户</block>
+  <block id="7e177185e7eddff33dd8f3aeb7551132" category="paragraph">如果您是拥有NSS帐户的NetApp客户、则只需通过BlueXP注册支持即可。</block>
+  <block id="b019ab068deba8494415cbd226ca0c4e" category="list-text">在BlueXP控制台的右上角、单击设置图标、然后选择*凭据*。</block>
+  <block id="41e1e3cff4a07ce2ecc08e6c09f11092" category="list-text">单击*用户凭据*。</block>
+  <block id="0c788a722f31f8f0cf36539ee04615cf" category="list-text">选择*添加NSS凭证*，然后按照NetApp 支持站点(NSS)鉴定提示进行操作。</block>
+  <block id="8c916e828e9e5a3592c8cac4e25928be" category="list-text">要确认注册过程是否成功，请单击帮助图标，然后选择*Support*。</block>
+  <block id="8add4eb0d3f6ce61d374f3df3ee4eadf" category="paragraph">“资源”页面应显示您的帐户已注册支持。</block>
+  <block id="10c56875db7a47f791d653e5d5bff0e9" category="inline-image-macro">屏幕截图、显示帐户序列号、绿色复选框以及注册支持的文本。</block>
+  <block id="3d183819a15163ef2e2e7d9d764254a9" category="paragraph"><block ref="3d183819a15163ef2e2e7d9d764254a9" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="d9a01bdcfab6f0a10fc126999b4d5988" category="paragraph">请注意、其他BlueXP用户如果没有将NetApp 支持站点 帐户与其BlueXP登录关联、则不会看到此相同的支持注册状态。但是、这并不意味着您的BlueXP帐户未注册支持。只要帐户中有一个用户执行了这些步骤、您的帐户即已注册。</block>
+  <block id="1ff5aefce774ec72a211f2b3bb10b950" category="section-title">现有客户、但无NSS帐户</block>
+  <block id="bdd862f49d428a850400bcf2f53cdaf2" category="paragraph">如果您是现有许可证和序列号但拥有_no_ nss帐户的现有NetApp客户、则需要创建一个NSS帐户并将其与BlueXP登录关联。</block>
+  <block id="5b2b7f628f804bcb786a097c7e45aa41" category="inline-link">NetApp 支持站点 用户注册表</block>
+  <block id="0c4a8b62da9473fbd5401273c4f85ee0" category="list-text">完成以创建NetApp 支持站点 帐户<block ref="041bcb6d9bdf91f7d6ac92ae3a196e12" category="inline-link-rx"></block></block>
+  <block id="d61c9f72493817776f392db42ac446a2" category="list-text">请务必选择适当的用户级别、通常为* NetApp客户/最终用户*。</block>
+  <block id="5226d4ec1f4f81b740cbbd27635b441f" category="list-text">请务必复制上面用于序列号字段的BlueXP帐户序列号(960xxxx)。这样可以加快帐户处理速度。</block>
+  <block id="0499bba105f8a891a2c671f1ba99dd34" category="list-text">完成下的步骤、将新的NSS帐户与BlueXP登录关联起来 <block ref="2f3aba04ec49ee5f0573a6c80a1b9df2" category="inline-xref-macro-rx"></block>。</block>
+  <block id="e9b1f53d6cabb3394833a4e102eb6a69" category="section-title">NetApp的新品牌</block>
+  <block id="c20c107d0d4eef6351660f3590324232" category="paragraph">如果您是NetApp的新客户、并且没有NSS帐户、请按照以下每个步骤进行操作。</block>
+  <block id="1afe19576f77bb0073c93359ed2cbb18" category="list-text">在BlueXP控制台的右上角、单击帮助图标、然后选择*支持*。</block>
+  <block id="b50f0a46135bcb7083b1f2f82032fc26" category="inline-image-macro">帮助菜单的屏幕截图，其中列出的第一个选项为支持</block>
+  <block id="e8d4092baef6680c6a35d5228ae31de2" category="paragraph"><block ref="e8d4092baef6680c6a35d5228ae31de2" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="2974170a8b1b5b4a2ac69aacd4c1c9c3" category="list-text">从支持注册页面找到您的帐户ID序列号。</block>
+  <block id="379f9cd57d97013f3f7fdd24f692a0b1" category="paragraph"><block ref="379f9cd57d97013f3f7fdd24f692a0b1" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="dd50e314c18933734174c1156dd9237f" category="inline-link">NetApp的支持注册站点</block>
+  <block id="78f94e749b89d69dcbf3baff21ccb958" category="list-text">导航到<block ref="e1c4be66250fd76d5c52bfe2cb7daee2" category="inline-link-rx"></block> 并选择*我不是NetApp注册客户*。</block>
+  <block id="d4f633ef130727b2776fa7f45024ca7d" category="list-text">填写必填字段(带有红色星号的字段)。</block>
+  <block id="1128fc8d5ec64880f4d49337ed798d31" category="list-text">在*产品线*字段中、选择*云管理器*、然后选择适用的计费提供商。</block>
+  <block id="50a1dc01b7312307c34a888071586955" category="list-text">复制上述第2步中的帐户序列号、完成安全检查、然后确认您已阅读NetApp的全球数据隐私政策。</block>
+  <block id="3a24c87c9971d2011b4df223718f84b4" category="paragraph">系统会立即向提供的邮箱发送一封电子邮件、以完成此安全事务。如果验证电子邮件未在几分钟内收到、请务必检查您的垃圾邮件文件夹。</block>
+  <block id="03413baeca1ff7222737d8ce299bd4e8" category="list-text">在电子邮件中确认操作。</block>
+  <block id="201080500e946070a2e4873042507c77" category="paragraph">确认将向NetApp提交您的请求、并建议您创建NetApp 支持站点 帐户。</block>
+  <block id="cc8b0535948da368f832027c19b7f853" category="list-text">请务必复制上面用于序列号字段的帐户序列号(960xxxx)。这样可以加快帐户处理速度。</block>
+  <block id="bd965e38a0c9cf27aa1bde099308e23f" category="paragraph-title">完成后</block>
+  <block id="684375e279a289295b72a006d93e2c4c" category="paragraph">在此过程中、NetApp应与您联系。这是针对新用户的一次性入职练习。</block>
+  <block id="5cdee814e2d9ba3490a8f16d00c65759" category="paragraph">拥有NetApp 支持站点 帐户后、通过完成下的步骤将帐户与BlueXP登录关联起来 <block ref="2f3aba04ec49ee5f0573a6c80a1b9df2" category="inline-xref-macro-rx"></block>。</block>
+  <block id="3e616bae81890a6c8fae17c9b45af152" category="section-title">关联Cloud Volumes ONTAP支持的NSS凭据</block>
+  <block id="d8f0da67cbab6e43f6d266bdab68cdc8" category="paragraph">要为Cloud Volumes ONTAP启用以下关键工作流、需要将NetApp 支持站点 凭据与BlueXP帐户相关联：</block>
+  <block id="a0518a10626dc11fd00e2d20265ad240" category="list-text">注册按需购买Cloud Volumes ONTAP系统以获得支持</block>
+  <block id="321aadf78ef73521712291b7aba6411f" category="paragraph">要激活对系统的支持并访问 NetApp 技术支持资源，需要提供 NSS 帐户。</block>
+  <block id="d51b2b497db445a16b1c9583c1abbb59" category="list-text">自带许可证时部署Cloud Volumes ONTAP (BYOL)</block>
+  <block id="2ebfeabed40c2270d9fa8325080a4b3e" category="paragraph">需要提供您的NSS帐户、以便BlueXP可以上传您的许可证密钥并为您购买的期限启用订阅。这包括自动更新期限续订。</block>
+  <block id="f5135b68b75a8404803a1eb438e40c5e" category="list-text">将Cloud Volumes ONTAP 软件升级到最新版本</block>
+  <block id="39f382b97080640c75604b5890f3a5d3" category="paragraph">将NSS凭据与BlueXP帐户关联与与与BlueXP用户登录关联的NSS帐户不同。</block>
+  <block id="e3bc6d35311568d55f1c8ea11984b964" category="paragraph">这些NSS凭据与您的特定BlueXP帐户ID关联。属于BlueXP帐户的用户可以从*支持&gt; NSS管理*访问这些凭据。</block>
+  <block id="328a2c1e7778e9edaf79d90c51409ac4" category="list-text">如果您拥有客户级别的帐户、则可以添加一个或多个NSS帐户。</block>
+  <block id="e3cd99e4aa330ae6bdfb3754d83ae962" category="list-text">如果您拥有合作伙伴或经销商帐户、则可以添加一个或多个NSS帐户、但不能将其与客户级别的帐户同时添加。</block>
+  <block id="d17d6b5dafebab6b7659da8850737e70" category="list-text">单击 * NSS 管理 &gt; 添加 NSS 帐户 * 。</block>
+  <block id="8aaf101e623c543c7eef3c65f6233366" category="list-text">出现提示时，单击 * 继续 * 以重定向到 Microsoft 登录页面。</block>
+  <block id="19d089db572ee6a1e154a0c9c9e57bfd" category="paragraph">NetApp 使用 Microsoft Azure Active Directory 作为身份提供程序来提供特定于支持和许可的身份验证服务。</block>
+  <block id="465ec6d5eafa3524c948c99d8bfcd306" category="list-text">在登录页面上，提供 NetApp 支持站点注册的电子邮件地址和密码以执行身份验证过程。</block>
+  <block id="cbc6cc3bb022583403171b447b2a962c" category="paragraph">通过这些操作、BlueXP可以使用您的NSS帐户执行许可证下载、软件升级验证和未来支持注册等操作。</block>
+  <block id="cf3a2d2c139bf5c9cc87fe714bfff3b1" category="paragraph">请注意以下事项：</block>
+  <block id="ec084bb25ed5b934c09b361069c246b2" category="list-text">NSS帐户必须是客户级别的帐户(而不是来宾或临时帐户)。您可以拥有多个客户级别的NSS帐户。</block>
+  <block id="27387009488fe78dcc7cb7e3e432792f" category="list-text">如果此帐户是合作伙伴级别的帐户、则只能有一个NSS帐户。如果您尝试添加客户级别的NSS帐户、并且存在合作伙伴级别的帐户、则会收到以下错误消息：</block>
+  <block id="d926847e4634e19a1aa7358becc0fa27" category="paragraph">"此帐户不允许使用NSS客户类型、因为已存在不同类型的NSS用户。"</block>
+  <block id="a04a3a5322782e8c18d0d64be7e1ccbc" category="paragraph">如果您已有客户级别的NSS帐户、并尝试添加合作伙伴级别的帐户、则也是如此。</block>
+  <block id="1afe8a81cfddc9fa9559e272bb6b9496" category="list-text">成功登录后、NetApp将存储NSS用户名。</block>
+  <block id="1dcb63fd55c4d22e87cb32275b8cc808" category="inline-image-macro">由三个水平点组成的图标</block>
+  <block id="0dfcbbbe02d3e96f8ad78782e8772587" category="paragraph">这是系统生成的ID、映射到您的电子邮件。在* NSS Management*页面上、您可以从显示电子邮件 <block ref="5151db0ded96d46f40ae09b5e5b167a1" category="inline-image-macro-rx" type="image"></block> 菜单。</block>
+  <block id="fc79de85a483938f72fbcb9822ec0ae3" category="list-text">如果您需要刷新登录凭据令牌、则中还会提供一个*更新凭据*选项 <block ref="5151db0ded96d46f40ae09b5e5b167a1" category="inline-image-macro-rx" type="image"></block> 菜单。</block>
+  <block id="b14d512a3c64fb5df16f6721b0603c63" category="paragraph">使用此选项将提示您重新登录。请注意、这些帐户的令牌将在90天后过期。系统将发布通知、提醒您注意这一点。</block>
+  <block id="c9df4195a305212ffd7b56d24f67129d" category="summary">NetApp通过多种方式为BlueXP提供支持。全天候提供丰富的免费自助支持选项，例如知识库（ KB ）文章和社区论坛。您的支持注册包括通过 Web 服务单提供的远程技术支持。</block>
+  <block id="fabfc25ef8996fd90836e58a4c0b26b6" category="doc">获取帮助</block>
+  <block id="7c5661ab6b39ee901cea00a6e7020a49" category="paragraph">NetApp通过多种方式为BlueXP及其云服务提供支持。全天候提供丰富的免费自助支持选项，例如知识库（ KB ）文章和社区论坛。您的支持注册包括通过 Web 服务单提供的远程技术支持。</block>
+  <block id="edd15fbeb7b2dffa163336ecd4f3e80c" category="section-title">使用自助支持选项</block>
+  <block id="5e4b821a1a82558dead1ef6961e90666" category="paragraph">这些选项每周 7 天，每天 24 小时免费提供：</block>
+  <block id="5b6cf869265c13af8566f192b4ab3d2a" category="list-text">文档。</block>
+  <block id="a4a6c2ea0078252eac2d74ef3e6c917c" category="paragraph">您当前正在查看的BlueXP文档。</block>
+  <block id="19111351b69b6b15668130b38b7f6038" category="inline-link">知识库</block>
+  <block id="942c9249796cf6b78c981ebf15195809" category="list-text"><block ref="942c9249796cf6b78c981ebf15195809" category="inline-link-rx"></block></block>
+  <block id="9a3db1abe5491d0eb9bb5d125981356c" category="paragraph">搜索BlueXP知识库、查找有助于解决问题的文章。</block>
+  <block id="14526abd8bda5af347775025cd5342cf" category="inline-link">社区</block>
+  <block id="410fdb9caa9c64da2ff3f88f4836960d" category="list-text"><block ref="410fdb9caa9c64da2ff3f88f4836960d" category="inline-link-rx"></block></block>
+  <block id="00c5fef3bb9d593ae96bf5d2ee60354a" category="paragraph">加入BlueXP社区、关注正在进行的讨论或创建新的讨论。</block>
+  <block id="80b1b0d2b1ebf2b3cba2d25759801afd" category="list-text">mailto ： ng-cloudmanager-feedback@netapp.com （反馈电子邮件）</block>
+  <block id="6702efec14563f45f1ee2f8c613b8ad8" category="paragraph">我们非常重视您的反馈意见。提交反馈以帮助我们改进BlueXP。</block>
+  <block id="d88bacf2a9fdcbbc844edcba97c34e30" category="section-title">向NetApp支持部门创建案例</block>
+  <block id="82812db645b6ff5e9c2a24ddfb66c8d6" category="paragraph">除了上述自助支持选项之外、您还可以在激活支持后与NetApp支持专家合作解决任何问题。</block>
+  <block id="8fece025a1a8fef7018449bf104a2527" category="list-title">开始之前</block>
+  <block id="920fe1428c19533eda6222fe7e58efbe" category="inline-link">了解如何管理与BlueXP登录关联的凭据</block>
+  <block id="e1d2e1a634647fd631081bc4f6f8e523" category="list-text">要使用*创建案例*功能、您必须先将NetApp 支持站点 凭据与BlueXP登录名关联起来。<block ref="2a0d8b66ca9e99d023b48cf25f40fb12" category="inline-link-rx"></block>。</block>
+  <block id="e49aa971c20ec071f1b5bbc3c7266769" category="list-text">如果您为具有序列号的ONTAP系统创建案例、则您的NSS帐户必须与该系统的序列号相关联。</block>
+  <block id="6254a4afeeb76765a127fe74d31c1b3d" category="list-text">在BlueXP中、单击*帮助&gt;支持*。</block>
+  <block id="08d96fdd1a845d80db99e6e1dffb8bc7" category="list-text">在*资源*页面上、在技术支持下选择一个可用选项：</block>
+  <block id="383133cb6f7207b1c65c3ace94aa5e95" category="list-text">如果您要通过电话与某人通话、请单击*致电我们*。系统会将您定向到netapp.com上的一个页面、其中列出了您可以拨打的电话号码。</block>
+  <block id="5be2e1dfe4bf215289731df45ec8157b" category="list-text">单击*创建案例*、向NetApp支持专家开一个服务单：</block>
+  <block id="d63bf50426f4c712554faec55b30c548" category="list-text">*服务*：选择与问题描述 关联的服务。例如、当特定于技术支持问题描述 时、如果服务中包含工作流或功能、则为BlueXP。</block>
+  <block id="2e50c5f85523f0aba9ff2db10f18279c" category="list-text">*工作环境*：如果适用于存储、请选择* Cloud Volumes ONTAP *或* on-Prem*、然后选择关联的工作环境。</block>
+  <block id="aa996e20900197b0ea41485ada083d8c" category="paragraph">工作环境列表属于您在服务顶部横幅中选择的BlueXP帐户、工作空间和Connector的范围。</block>
+  <block id="e6f29fb3c7636dc0040600dd0e84bb79" category="list-text">*案例优先级*：选择案例的优先级、可以是"低"、"中"、"高"或"严重"。</block>
+  <block id="835eb4008e97c2a7f69bbb2725285e34" category="paragraph">要了解有关这些优先级的更多详细信息、请将鼠标悬停在字段名称旁边的信息图标上。</block>
+  <block id="0f7d9319c95a8be1492e74601c4b3259" category="list-text">*问题描述 *：提供问题的详细问题描述 、包括任何适用的错误消息或您执行的故障排除步骤。</block>
+  <block id="002c6f26fb01affb37b8cf3cef7a1fb0" category="list-text">*其他电子邮件地址*：如果您希望其他人了解此问题描述 、请输入其他电子邮件地址。</block>
+  <block id="c7f5c1a75acc58c6f004efc0ce1eba09" category="list-text">*附件(可选)*：一次最多上传五个附件。</block>
+  <block id="bfa80e7aaad6da353b431bff3a0e12d6" category="paragraph">每个文件的附件数限制为25 MB。支持以下文件扩展名：txt、log、pdf、jp6/jpeu、rtf、 doc/docx、xls/xlsx和csv。</block>
+  <block id="baaf0e61add7d12cf8d12e023d5aef18" category="inline-image-macro">创建案例表的屏幕截图、可用于向NetApp支持部门创建案例。</block>
+  <block id="509259be6d5e15d8959f705cbe0cbcc1" category="paragraph"><block ref="509259be6d5e15d8959f705cbe0cbcc1" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="18f487556417bb6d9721a7005ae097c9" category="paragraph">此时将显示一个弹出窗口、其中包含您的支持案例编号。NetApp支持专家将审核您的案例、并尽快与您联系。</block>
+  <block id="04e15da1deae9568b4dcda64fbb0c8d5" category="paragraph">有关支持案例的历史记录、您可以单击*设置&gt;时间线*并查找名为"创建支持案例"的操作。 最右侧的按钮可用于展开操作以查看详细信息。</block>
+  <block id="5c56753585e89a84941bb3a78bc681af" category="paragraph">尝试创建案例时、您可能会遇到以下错误消息：</block>
+  <block id="a30f69ab0ec85d427a3e8835713525bd" category="paragraph">"您无权针对选定服务创建案例"</block>
+  <block id="c7b7a5ae9f37fd7d24e4d641b9186fe9" category="paragraph">此错误可能意味着NSS帐户及其关联的记录公司与BlueXP帐户序列号(即960xxxx)或工作环境序列号。您可以使用以下选项之一寻求帮助：</block>
+  <block id="e01df0b4dfd95eba2c59333419e4fac6" category="list-text">使用产品内聊天功能</block>
+  <block id="639be990cfca56ab4b63685d8bacd437" category="list-text">通过提交非技术案例<block ref="2298f47e4dad19a3156da7ce6116d9b1" category="inline-link-rx"></block></block>
+  <block id="898e35e1a4bf4b025c3edec879439b08" category="section-title">管理支持案例(预览)</block>
+  <block id="8b74b053fbeeff5c3b6f4991cb1d028d" category="paragraph">您可以直接从BlueXP查看和管理活动的和已解决的支持案例。您可以管理与您的NSS帐户和公司关联的案例。</block>
+  <block id="394ef093ad3259b9ff0fe7406f015b83" category="paragraph">案例管理以预览形式提供。我们计划改进此体验、并在即将发布的版本中添加增强功能。请通过产品内聊天向我们发送反馈。</block>
+  <block id="5e4e7672ec2ba2b8a763da7f6714e212" category="list-text">页面顶部的案例管理信息板提供了两个视图：</block>
+  <block id="01c3ffea552d74a5ae390b10e71a1f26" category="list-text">左侧视图显示了您提供的用户NSS帐户在过去3个月内打开的案例总数。</block>
+  <block id="e3b6c09a5686233f72ce1ea60a1eb088" category="list-text">右侧视图显示了过去3个月内根据用户NSS帐户在公司级别开立的案例总数。</block>
+  <block id="b19b168cc8a2b8c984465e140256b3a2" category="paragraph">此表中的结果反映了与选定视图相关的案例。</block>
+  <block id="56dcadeee6b0e5c47a52673f9b5a0bb3" category="list-text">您可以添加或删除感兴趣的列、也可以筛选优先级和状态等列的内容。其他列仅提供排序功能。</block>
+  <block id="6f936762e1223311f031685422fcd3a4" category="paragraph">有关更多详细信息、请查看以下步骤。</block>
+  <block id="b14929795a61440e9b4ec9f8a4885ae3" category="list-text">在每个案例级别、我们可以更新案例备注或关闭尚未处于"已关闭"或"待关闭"状态的案例。</block>
+  <block id="34b1296d31cefa72dae9b3a364b1f444" category="list-text">单击*案例管理*、如果出现提示、请将您的NSS帐户添加到BlueXP。</block>
+  <block id="d8ce1865cf1fe3cffd60300b4b86ad63" category="paragraph">"*案例管理*"页面显示了与您的BlueXP用户帐户关联的NSS帐户相关的已打开案例。此NSS帐户与* NSS管理*页面顶部显示的NSS帐户相同。</block>
+  <block id="2ae5ae78bdb2d222f15fd8e89248709c" category="list-text">也可以修改表中显示的信息：</block>
+  <block id="27635a52fe4c34c39ffc6430f4244ec6" category="list-text">在*组织的案例*下、单击*查看*以查看与您的公司关联的所有案例。</block>
+  <block id="059e856250b59be3069246887b74a23c" category="list-text">通过选择确切的日期范围或选择其他时间范围来修改日期范围。</block>
+  <block id="dfb3764bce2548df4e06357403f9c7d0" category="inline-image-macro">案例管理页面上表上方选项的屏幕截图、可用于选择确切的日期范围或过去7天、30天或3个月。</block>
+  <block id="0972db30d942fdb65d1732e6e84bde99" category="paragraph"><block ref="0972db30d942fdb65d1732e6e84bde99" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="a1bb576be9e5a356290f231efb51b3f5" category="list-text">筛选列的内容。</block>
+  <block id="3753f10a59e21f58b30e3e67d416453e" category="inline-image-macro">"状态"列中筛选选项的屏幕截图、可用于筛选与特定状态(如"活动"或"已关闭")匹配的案例。</block>
+  <block id="cb6a777dd3c6e43b0dc441d38519d219" category="paragraph"><block ref="cb6a777dd3c6e43b0dc441d38519d219" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="1c6ea5ef583389e18e7d7bda70beaa71" category="inline-image-macro">表中显示的加号图标</block>
+  <block id="0f6cac2f77150840994f84044fc1b12b" category="list-text">通过单击更改表中显示的列 <block ref="b574dd55d604ddb721d869a0fc302007" category="inline-image-macro-rx" type="image"></block> 然后选择要显示的列。</block>
+  <block id="370b44009f1b82d0b6b178bb80cc62fa" category="inline-image-macro">显示可在表中显示的列的屏幕截图。</block>
+  <block id="e65065c4fd326b9f3a1eeb9453c30d73" category="paragraph"><block ref="e65065c4fd326b9f3a1eeb9453c30d73" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="ad0ae9ea1f2e8d973a9a0f6bb169f494" category="inline-image-macro">包含三个点的图标、显示在表的最后一列中</block>
+  <block id="6ba7d68d8b3ef0f3398afb9d3ea96172" category="list-text">单击以管理现有案例 <block ref="566c029d89e7d5421080767a37bf443e" category="inline-image-macro-rx" type="image"></block> 并选择一个可用选项：</block>
+  <block id="6d9dd74e7709ef802d299966f7898f6b" category="list-text">*查看案例*：查看有关特定案例的完整详细信息。</block>
+  <block id="8e6b52a532a4fbbfc98dca3ebfa5f1e6" category="list-text">*更新案例注释*：提供有关您的问题的更多详细信息、或者选择*上传文件*最多附加五个文件。</block>
+  <block id="f791bc685c526af8296381acff10f6a0" category="list-text">*关闭案例*：提供关闭案例的详细信息、然后单击*关闭案例*。</block>
+  <block id="e93217b2f709a398ce3c0fb753beb05f" category="inline-image-macro">屏幕截图、显示在表的最后一列中选择菜单后可以执行的操作。</block>
+  <block id="2ea260929e27ffcb623c8aa35689bd18" category="paragraph"><block ref="2ea260929e27ffcb623c8aa35689bd18" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="cebcc4f8fb63a87b8b3ed75359f6fe2b" category="summary">在安装Open Virtual Appliance (OVA)之前、请将证书添加到vCenter中。tar文件包含OVA和Entrustate根证书和中间证书、这些证书可以在证书文件夹中找到。VMware vCenter 8.0及更高版本支持OVA部署。</block>
+  <block id="596e6d7cbb1dd1b33baf91e428660d8d" category="doc">下载Open Virtual Appliance (OVA)</block>
+  <block id="79ffbf4faa4d41e09eeadafaa6e0f3ed" category="paragraph">在安装Open Virtual Appliance (OVA)之前、请将证书添加到vCenter中。。<block ref="58963a595c988dc6f693cb3238dc907a" prefix=" " category="inline-code"></block> 文件包含OVA和Entrust根证书和中间证书、这些证书位于证书文件夹中。VMware vCenter 8.0及更高版本支持OVA部署。</block>
+  <block id="710a335d5d45bb0e553c8dfc3cb5fb65" category="paragraph">如果由Entrust证书签名的OVA不可信、则需要执行以下操作步骤来解析问题描述。</block>
+  <block id="e4e11fb02983a1042067d773fc061af8" category="list-text">要下载VM OVA的BlueXP备份和恢复、请执行以下操作：</block>
+  <block id="9d2169c1c2855b78a7aeaa4f42d27dc7" category="inline-link">NetApp 支持站点</block>
+  <block id="8616311ff8b8fbc30493b11c288ebdb1" category="list-text">登录到<block ref="475bc6b7fc84a67aa4a3725984f65243" category="inline-link-rx"></block></block>
+  <block id="7cb834fabfa5c8527836361e4f3f2ee4" category="list-text">从产品列表中，选择*VMS*的BlueXP备份和恢复*，然后单击*Download latest Release (下载最新版本)*按钮。</block>
+  <block id="e1349765918d1ee56b3cf4abe7d1a7d8" category="list-text">下载VM的BlueXP备份和恢复<block ref="58963a595c988dc6f693cb3238dc907a" prefix=" " category="inline-code"></block> 文件到任何位置。</block>
+  <block id="f7fa43f6dd6c15d238137979bfafde96" category="list-text">提取tar文件的内容。tar文件包含OVA和certs文件夹。certs文件夹包含Entrust. root和Intermediate证书。</block>
+  <block id="cfaf5f859f4686c2b852499357f9dc25" category="list-text">使用vSphere Client凭据登录到AWS上的VMC。</block>
+  <block id="7100253078fe422eb855de61ba19293d" category="list-text">导航到菜单：管理[证书&gt;证书管理]。</block>
+  <block id="cb4150305fb89a3d123bd5def9035842" category="list-text">在“*可信根证书*”旁边，单击“*添加*”。</block>
+  <block id="cae0f21a04207830bb7b0629d6cb6d8b" category="list-text">转到" certs "文件夹。</block>
+  <block id="d93a23c4b41c8a9962980d34d8ebb285" category="list-text">选择Entrustroot和Intermediate证书。</block>
+  <block id="28f971e28dfc95cd1f45e3f3e43cb5ae" category="list-text">一次安装一个证书。</block>
+  <block id="47d335151244395fba53cdbebf56ce73" category="list-text">证书将添加到"可信根证书"下的面板中。</block>
+  <block id="f8cf0f876b8fb430444b7badd68d522a" category="paragraph">安装证书后、可以验证并部署OVA。</block>
+  <block id="ac0fcdd28a3e3090428955f626f658ae" category="paragraph">如果下载的OVA未被篡改、则发布者列将显示可信证书。</block>
+  <block id="0bf23a34b361e04176b05c8ff9933dab" category="summary">了解适用于VM的BlueXP备份和恢复的新增功能。</block>
+  <block id="cbe3139b2b301e8b5cb09208b5f9c7a9" category="doc">适用于VM的BlueXP备份和恢复的新增功能</block>
+  <block id="6288a6987e24eb76541c52625adf3260" category="paragraph">了解适用于VM的BlueXP备份和恢复的新增功能。</block>
+  <block id="cc1b4c646adefed490c7696f1ff7817f" category="section-title">2023年7月13日</block>
+  <block id="121644fa305df0bb070aa57221c009d8" category="section-title">适用于VM 1.0的BlueXP备份和恢复现已正式发布</block>
+  <block id="8dafb4fe85f37b1e252552bbe0dc8770" category="paragraph">您可以通过对VM使用BlueXP备份和恢复来保护虚拟机上的数据。您可以在Amazon FSx上备份数据存储库并将虚拟机还原到其原始位置。</block>
+  <block id="84258e8a50fea5298ac22726e784f700" category="paragraph">此解决方案专用于VMware Cloud on AWS和Amazon FSx for NetApp ONTAP上的虚拟机和数据存储库。</block>
+  <block id="d239c84aafe816ca8d29fe43ddfd8fc2" category="paragraph"><block ref="d239c84aafe816ca8d29fe43ddfd8fc2" category="inline-link-macro-rx"></block></block>
+  <block id="fa6a722d89c88282f71082f279d5f8ab" category="summary">还原虚拟机时、您可以使用所选的备份副本覆盖现有内容、也可以创建虚拟机的副本。</block>
+  <block id="288451f6138b6088004689ea7006cbe9" category="doc">从Amazon FSx还原虚拟机</block>
+  <block id="9560f1f6257455641b369c78c24ba389" category="list-text">必须存在备份。</block>
+  <block id="1b7e9359902782e10a9a390de62f931b" category="paragraph">您必须已使用BlueXP备份和恢复为虚拟机创建备份、然后才能还原虚拟机。</block>
+  <block id="d46b3d9b39b92f404423eb81d683ee8c" category="paragraph">如果虚拟机的Snapshot副本是由虚拟机的BlueXP备份和恢复以外的软件执行的、则还原操作无法成功完成。</block>
+  <block id="2e49391fc04780cd542d3abd73d378c7" category="list-text">虚拟机不得在传输中。</block>
+  <block id="7becb12abd0b010b5f658d46a631986d" category="paragraph">要还原的虚拟机不能处于vMotion或Storage vMotion状态。</block>
+  <block id="fe1a8806b2314aa86b6c78526a3a59f3" category="list-text">HA配置错误。</block>
+  <block id="1d7436e341895808fe351ed607ff7409" category="paragraph">在将备份还原到其他位置之前，请确保 vCenter ESXi 主机摘要屏幕上未显示 HA 配置错误。</block>
+  <block id="da3354cf95782becd9873fd1995f3c04" category="list-text">虚拟机已取消注册并重新注册。</block>
+  <block id="082437eea99df6f02c7a41061bfdc038" category="paragraph">虚拟机的还原操作会取消注册原始虚拟机、从备份Snapshot副本还原虚拟机、并在同一ESXi服务器上注册具有相同名称和配置的还原虚拟机。还原后、必须手动将虚拟机添加到资源组。</block>
+  <block id="3ccb545df639f8d635171ca5cad8bac1" category="list-text">还原数据存储库</block>
+  <block id="53cfd56b3608a4ed4c03e8e0c5caae45" category="paragraph">您无法还原数据存储库、但可以还原数据存储库中的任何虚拟机。</block>
+  <block id="6d7ec4cee1b0c4e3059a9c3d8bb71046" category="list-text">虚拟机的VMware一致性快照失败。</block>
+  <block id="45ece8b1113e383b0e7e2917cb3d88a5" category="paragraph">即使虚拟机的VMware一致性快照发生故障、也会备份该虚拟机。您可以在还原向导中查看备份副本中包含的实体，并将其用于还原操作。</block>
+  <block id="a638ca591549f6494bfb64fca964731b" category="list-text">在VMware vSphere Web Client GUI中，单击工具栏中的*菜单*，单击*清单*，然后选择*虚拟机和模板*。</block>
+  <block id="c22f3159395e7ce6c9a8b604106623f7" category="list-text">在左侧导航器窗格中，右键单击一个*Virtual Machine*，然后在NetApp下拉列表中选择*Cloud Backup*，然后选择*Restore*以启动向导。</block>
+  <block id="de43308fec906273acd64a6aed609cb8" category="list-text">在 * 还原 * 向导的 * 选择备份 * 页面上，选择要还原的备份 Snapshot 副本。</block>
+  <block id="43bf8720e765e5ec5249782941ceb574" category="paragraph">您可以搜索特定备份名称或部分备份名称，也可以通过单击筛选器图标并选择日期和时间范围，选择是否要包含 VMware Snapshot 的备份，是否要挂载备份以及位置来筛选备份列表。单击 * 确定 * 以返回到向导。</block>
+  <block id="664749414cf1bca3f1fd4f2bfac452d3" category="list-text">在*选择范围*页面上，在*还原范围*字段中选择*整个虚拟机*，然后选择还原位置，并输入应挂载备份的目标ESXi信息。</block>
+  <block id="9d7f2f9bd72cb1eb66d906abadf682b1" category="paragraph">还原部分备份时，还原操作会跳过 * 选择范围 * 页面。</block>
+  <block id="4a501b597bd4167c209d8bdff7aa576e" category="list-text">如果要在还原操作后启动虚拟机，请启用*Restart VM*复选框。</block>
+  <block id="de179e769f37bceb37b99454fcd0fc9f" category="list-text">在 * 选择位置 * 页面上，选择已还原数据存储库的位置。</block>
+  <block id="fca1924bee8a7a6fbfd8c512efe56373" category="list-text">查看“*摘要*”页，然后单击“*完成*”。</block>
+  <block id="ba4e58f4bc0a74931646cad754c7a04b" category="list-text">*可选*：单击屏幕底部的*近期任务*来监视操作进度。</block>
+  <block id="5fc34c96a53e88e10cd1df77a72005f4" category="list-text">将已还原的虚拟机添加到资源组。</block>
+  <block id="a1c0ec7f7265d7d6dfdfe38fee9792ba" category="paragraph">尽管虚拟机已还原、但它们不会自动添加到以前的资源组中。因此、您必须手动将已还原的虚拟机添加到相应的资源组。</block>
+  <block id="a6fc5033cd7d2f5d0e979c35a6273cb2" category="sidebar">适用于VM的BlueXP备份和恢复是一个独立的虚拟设备(开放式虚拟设备格式)、可为基于AWS的VMware Cloud和适用于NetApp ONTAP的Amazon FSx上的VM和数据存储库提供数据保护服务。</block>
+  <block id="be11c74c1dd7f307bb80183a90dc2067" category="sidebar">入门</block>
+  <block id="d371b3e46ec1452b89412f2da008cb64" category="sidebar">了解适用于VM的BlueXP备份和恢复</block>
+  <block id="9007a105e32d922b23d29ba0aead2fcc" category="sidebar">下载OVA</block>
+  <block id="8bb0226ce7a5cb9b16b8b08929241212" category="sidebar">对VM使用BlueXP备份和恢复</block>
+  <block id="0a4a3719bc7519d1162060e0f0e08f8a" category="sidebar">创建备份策略</block>
+  <block id="2565487a49c72c3b5f0b1a94e3967341" category="sidebar">适用于VM的BlueXP备份和恢复文档</block>
+  <block id="7d0ee6fed10d3d4e5c9ee496729ab519" category="sidebar">发行说明</block>
+  <block id="735a77510f7427ed8e16a69ca145868b" category="sidebar">将NFS数据存储库备份到Amazon FSx</block>
+  <block id="0adc03eac86772ad2c75c8f140be417e" category="sidebar">知识和支持</block>
+</blocks>

@@ -1,0 +1,36 @@
+---
+permalink: task-back-up-resource-groups-on-demand.html 
+sidebar: sidebar 
+keywords: back up, resource, groups, demand 
+summary: 备份操作对资源组中定义的所有资源执行。如果资源组附加了策略并配置了计划，则会根据计划自动进行备份。 
+---
+= 按需备份资源组
+:allow-uri-read: 
+:experimental: 
+:icons: font
+:imagesdir: ./media/
+
+
+[role="lead"]
+备份操作对资源组中定义的所有资源执行。如果资源组附加了策略并配置了计划，则会根据计划自动进行备份。
+
+.开始之前
+* 您必须已创建附加了策略的资源组。
++
+[NOTE]
+====
+当VM MySQL数据库的BlueXP备份和恢复作业已在运行时、请勿启动按需备份作业。使用维护控制台查看为 MySQL 数据库配置的备份计划。
+
+====
++
+.步骤
+.. 在vCenter Web Client页面的左侧导航器窗格中、单击menu：适用于VM[资源组]的BlueXP备份和恢复、然后选择一个资源组、再单击*立即运行*以启动备份。
++
+image:vSphere client_resource group.png[""]
+
+.. 如果资源组配置了多个策略、则在立即备份对话框中、选择要用于此备份操作的策略。
+.. 单击 * 确定 * 以启动备份。
+.. 如果对备份中的任何虚拟机执行静用操作失败、则备份完成时会显示警告、并标记为虚拟机不一致、即使选定策略已选择虚拟机一致性也是如此。在这种情况下、某些虚拟机可能已成功静机。在作业监控器中、故障虚拟机详细信息会将"quiose."显示为"failed。
+
+
+

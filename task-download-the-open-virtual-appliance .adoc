@@ -1,0 +1,47 @@
+---
+permalink: task-download-the-open-virtual-appliance.html 
+sidebar: sidebar 
+keywords: download, open virtual appliance 
+summary: '在安装Open Virtual Appliance (OVA)之前、请将证书添加到vCenter中。tar文件包含OVA和Entrustate根证书和中间证书、这些证书可以在证书文件夹中找到。VMware vCenter 8.0及更高版本支持OVA部署。' 
+---
+= 下载Open Virtual Appliance (OVA)
+:allow-uri-read: 
+:experimental: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+在安装Open Virtual Appliance (OVA)之前、请将证书添加到vCenter中。。 `.tar` 文件包含OVA和Entrust根证书和中间证书、这些证书位于证书文件夹中。VMware vCenter 8.0及更高版本支持OVA部署。
+
+如果由Entrust证书签名的OVA不可信、则需要执行以下操作步骤来解析问题描述。
+
+.步骤
+. 要下载VM OVA的BlueXP备份和恢复、请执行以下操作：
++
+** 登录到 https://mysupport.netapp.com/products/index.html["NetApp 支持站点"^]
+** 从产品列表中，选择*VMS*的BlueXP备份和恢复*，然后单击*Download latest Release (下载最新版本)*按钮。
+** 下载VM的BlueXP备份和恢复 `.tar` 文件到任何位置。
+
+
+. 提取tar文件的内容。tar文件包含OVA和certs文件夹。certs文件夹包含Entrust. root和Intermediate证书。
+. 使用vSphere Client凭据登录到AWS上的VMC。
+. 导航到菜单：管理[证书>证书管理]。
+. 在“*可信根证书*”旁边，单击“*添加*”。
++
+** 转到" certs "文件夹。
+** 选择Entrustroot和Intermediate证书。
+** 一次安装一个证书。
+
+
+. 证书将添加到"可信根证书"下的面板中。
++
+安装证书后、可以验证并部署OVA。
+
+
+
+[NOTE]
+====
+如果下载的OVA未被篡改、则发布者列将显示可信证书。
+
+====

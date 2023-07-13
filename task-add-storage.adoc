@@ -1,0 +1,43 @@
+---
+permalink: task-add-storage.html 
+sidebar: sidebar 
+keywords: add, storage 
+summary: '在备份或还原VM之前、您必须添加"Amazon FSx for NetApp ONTAP "或"Amazon FSx for NetApp ONTAP SVM"作为存储系统。通过添加存储、VM的BlueXP备份和恢复功能可以识别和管理vCenter中的备份和还原操作。' 
+---
+= 添加存储
+:allow-uri-read: 
+:icons: font
+:imagesdir: ./media/
+
+
+[role="lead"]
+在备份或还原VM之前、您必须添加"Amazon FSx for NetApp ONTAP "或"Amazon FSx for NetApp ONTAP SVM"作为存储系统。通过添加存储、VM的BlueXP备份和恢复功能可以识别和管理vCenter中的备份和还原操作。
+
+.开始之前
+ESXi服务器、VM的BlueXP备份和恢复以及每个vCenter必须同步到同一时间。如果您尝试添加存储，但 vCenter 的时间设置未同步，则此操作可能会失败并显示 Java 证书错误。
+
+.关于此任务
+适用于VM的BlueXP备份和恢复可在直接连接的Storage VM和存储集群中的Storage VM上执行备份和还原操作。
+
+* Storage VM 的名称必须解析为管理 LIF 。
++
+如果您在VM的BlueXP备份和恢复中为Storage VM名称添加了其他主机条目、则必须验证它们是否也可从虚拟设备进行解决。
+
++
+如果您添加的 Storage VM 名称无法解析为管理 LIF ，则计划的备份作业将失败，因为此插件无法发现此 Storage VM 上的任何数据存储库或卷。如果发生这种情况、请将此Storage VM添加到VM的BlueXP备份和恢复中并指定管理LIF、或者添加包含此Storage VM的集群并指定集群管理LIF。
+
+* 存储身份验证详细信息不会在VM的多个BlueXP备份和恢复实例之间共享、也不会在vCenter上的Windows SnapCenter Server和VM的BlueXP备份和恢复实例之间共享。
+
+
+.步骤
+. 在vSphere客户端的左侧导航器窗格中、单击*存储系统*。
+. 在存储系统页面上，单击*Add*。
++
+image:vSphere client.png[""]
+
+. 在*添加存储系统*向导中，输入Storage VM或集群的基本信息。
+. 选择*凭据*身份验证方法并以Amazon FSx管理员身份登录。
+. 单击 * 添加 * 。
+
+
+如果添加了存储集群，则会自动添加该集群中的所有 Storage VM 。自动添加的 Storage VM （有时称为 " 隐式 " Storage VM ）会显示在集群摘要页面上，并使用连字符（ - ）而非用户名。只有显式存储实体才会显示用户名。

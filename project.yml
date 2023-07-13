@@ -1,0 +1,49 @@
+---
+settings:
+  name: BlueXP backup and recovery for VMs
+  internal:
+    pdf_enabled: true
+  prod:
+    pdf_enabled: true
+    harmony_enabled: false
+  langs: zh-cn,us-en,ja-jp,ko-kr,zh-tw,de-de,es-es,fr-fr,it-it
+sidebar:
+  entries:
+  - title: 适用于VM的BlueXP备份和恢复文档
+    url: "/index.html"
+  - title: 发行说明
+    url: "/whats-new.html"
+  - title: 入门
+    entries:
+    - title: 了解适用于VM的BlueXP备份和恢复
+      url: "/concept-bluexp-backup-and-recovery-for-virtual-machines-on-amazon-fsx.html"
+    - title: 不支持的工作流
+      url: "/concept-unsupported-workflows.html"
+  - title: 为VM部署BlueXP备份和恢复
+    entries:
+    - title: 要求和注意事项
+      url: "/reference-requirements-and-considerations.html"
+    - title: 下载OVA
+      url: "/task-download-the-open-virtual-appliance.html"
+    - title: 为VM部署BlueXP备份和恢复
+      url: "/task-deploy-bluexp-backup-and-recovery-for-vms.html"
+  - title: 将NFS数据存储库备份到Amazon FSx
+    entries:
+    - title: 添加存储
+      url: "/task-add-storage.html"
+    - title: 创建备份策略
+      url: "/task-create-backup-policies-for-vms-and-datastores.html"
+    - title: 创建资源组
+      url: "/task-create-resource-groups.html"
+    - title: 按需备份资源组
+      url: "/task-back-up-resource-groups-on-demand.html"
+  - title: 从Amazon FSx还原虚拟机
+    url: "/task-restore-virtual-machines-from-amazon-fsx.html"
+  - title: 知识和支持
+    entries:
+    - title: 注册以获得支持
+      url: "/task-support-registration.html"
+    - title: 获取帮助
+      url: "/task-get-help.html"
+  - title: 法律声明
+    url: "/legal-notices.html"

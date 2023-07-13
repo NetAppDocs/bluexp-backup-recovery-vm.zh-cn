@@ -1,0 +1,28 @@
+---
+permalink: whats-new.html 
+sidebar: sidebar 
+keywords: 2-node switched Cisco 92300YC cluster switch migration 
+summary: 了解适用于VM的BlueXP备份和恢复的新增功能。 
+---
+= 适用于VM的BlueXP备份和恢复的新增功能
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+了解适用于VM的BlueXP备份和恢复的新增功能。
+
+
+
+== 2023年7月13日
+
+
+
+=== 适用于VM 1.0的BlueXP备份和恢复现已正式发布
+
+您可以通过对VM使用BlueXP备份和恢复来保护虚拟机上的数据。您可以在Amazon FSx上备份数据存储库并将虚拟机还原到其原始位置。
+
+此解决方案专用于VMware Cloud on AWS和Amazon FSx for NetApp ONTAP上的虚拟机和数据存储库。
+
+link:concept-bluexp-backup-and-recovery-for-virtual-machines-on-amazon-fsx.html["适用于Amazon FSx上虚拟机的BlueXP备份和恢复"]

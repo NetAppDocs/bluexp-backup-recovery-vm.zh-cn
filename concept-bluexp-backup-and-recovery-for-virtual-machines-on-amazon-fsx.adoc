@@ -1,0 +1,20 @@
+---
+permalink: concept-bluexp-backup-and-recovery-for-virtual-machines-on-amazon-fsx.html 
+sidebar: sidebar 
+keywords: bluexp, backup, recovery, virtual machines, amazon fsx 
+summary: '适用于VM的BlueXP备份和恢复是一个独立的虚拟设备(开放式虚拟设备格式)、可为基于AWS的VMware Cloud和适用于NetApp ONTAP的Amazon FSx上的VM和数据存储库提供数据保护服务。您可以使用适用于VM的BlueXP备份和恢复功能备份数据存储库并将虚拟机还原到其原始位置。' 
+---
+= 适用于Amazon FSx上虚拟机的BlueXP备份和恢复
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+适用于VM的BlueXP备份和恢复是一个独立的虚拟设备(开放式虚拟设备格式)、可为基于AWS的VMware Cloud和适用于NetApp ONTAP的Amazon FSx上的VM和数据存储库提供数据保护服务。您可以使用适用于VM的BlueXP备份和恢复功能备份数据存储库并将虚拟机还原到其原始位置。
+
+* 您只能在Amazon FSx上备份NFS类型的数据存储库。
+* 要备份NFS数据存储库、您应运行ONTAP 9.10或更高版本。
+* VMware Cloud具有预定义的"CloudAdmin"角色。CloudAdmin角色具有创建和管理SDDC工作负载以及存储策略、内容库、vSphere标记和资源池等相关对象所需的权限。
+* 您可以将VM和VMDK还原到其当前位置(就地还原)。
+

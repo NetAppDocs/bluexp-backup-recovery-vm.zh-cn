@@ -1,0 +1,29 @@
+---
+indexpage:
+  lead: 适用于VM的BlueXP备份和恢复是一个独立的虚拟设备(开放式虚拟设备格式)、可为基于AWS的VMware Cloud和适用于NetApp ONTAP的Amazon
+    FSx上的VM和数据存储库提供数据保护服务。
+  tiles:
+  - title: 入门
+    links:
+    - title: 了解适用于VM的BlueXP备份和恢复
+      url: concept-bluexp-backup-and-recovery-for-virtual-machines-on-amazon-fsx.html
+    - title: 不支持的工作流
+      url: concept-unsupported-workflows.html
+  - title: 为VM部署BlueXP备份和恢复
+    links:
+    - title: 下载OVA
+      url: task-download-the-open-virtual-appliance.html
+    - title: 为VM部署BlueXP备份和恢复
+      url: task-deploy-bluexp-backup-and-recovery-for-vms.html
+  - title: 对VM使用BlueXP备份和恢复
+    links:
+    - title: 添加存储
+      url: task-add-storage.html
+    - title: 创建备份策略
+      url: task-create-backup-policies-for-vms-and-datastores.html
+    - title: 创建资源组
+      url: task-create-resource-groups.html
+    - title: 按需备份资源组
+      url: task-back-up-resource-groups-on-demand.html
+    - title: 从Amazon FSx还原虚拟机
+      url: task-restore-virtual-machines-from-amazon-fsx.html

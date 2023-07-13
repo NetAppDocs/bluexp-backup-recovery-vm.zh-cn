@@ -1,0 +1,22 @@
+---
+permalink: concept-unsupported-workflows.html 
+sidebar: sidebar 
+keywords: unsupported, workflows 
+summary: 不支持的工作流 
+---
+= 不支持的工作流
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+适用于VM 1.0的BlueXP备份和恢复不支持以下工作流：
+
+* 连接和断开 VMDK
+* 挂载和卸载数据存储库
+* 还原子系统文件和文件夹
+* 还原到备用位置
+* 使用"证书"身份验证方法添加存储系统
+* 添加NetApp ONTAP FlexGroup卷
+
