@@ -27,3 +27,11 @@ indexpage:
       url: task-back-up-resource-groups-on-demand.html
     - title: 从Amazon FSx还原虚拟机
       url: task-restore-virtual-machines-from-amazon-fsx.html
+  - title: 演示和教程
+    links:
+    - title: 为VM安装BlueXP备份和恢复
+      url: https://www.youtube.com/watch?v=kCuKY0fBf5U
+    - title: 为ONTAP数据存储库和VM备份FSx
+      url: https://www.youtube.com/watch?v=cLWOFm_3g3U
+    - title: 还原ONTAP数据存储库VM和VMDK的FSx
+      url: https://www.youtube.com/watch?v=RVLYP0lguxkM
