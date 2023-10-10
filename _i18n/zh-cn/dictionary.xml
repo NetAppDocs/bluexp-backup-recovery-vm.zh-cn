@@ -89,7 +89,6 @@ Snapshot 标签有助于将使用此策略创建的快照与二级存储系统�
   <block id="1ac228dd82997c534998d8c776a81009" category="list-text">您必须拥有一个包含有效公共密钥和专用密钥文件的证书。有关详细信息、请参见存储证书管理一节下的文章。</block>
   <block id="78dd2db401a1c567e4094c34da3d53e3" category="list-text">您必须已注销并关闭vSphere客户端的所有浏览器会话、并删除浏览器缓存、以避免在为VM部署BlueXP备份和恢复期间出现任何浏览器缓存问题描述。</block>
   <block id="8ba7fa3d7ed705b172a2802a36085538" category="list-text">您必须已在 vCenter 中启用传输层安全（ TLS ）。请参见 VMware 文档。</block>
-  <block id="d706d30254764a674cce32eb658463b4" category="paragraph">在与vCenter相同的时区为VM部署BlueXP备份和恢复。</block>
   <block id="60fef4f382ecd40d07aa6f5d88accaa7" category="list-text">对于VMware vCenter 7.0.3及更高版本、请按照下载开放式虚拟设备(OVA)一节中的步骤将证书导入到vCenter中。</block>
   <block id="9e6343514537d0d6a99bafe616c5aa86" category="list-text">在浏览器中，导航到 VMware vSphere vCenter 。</block>
   <block id="a5bc2dcdf45e4e981e8c5477447aa605" category="list-text">登录到* VMware vCenter单点登录页面*。</block>
@@ -453,4 +452,8 @@ Snapshot 标签有助于将使用此策略创建的快照与二级存储系统�
   <block id="522cbb900314aeb84eb5a961c5f94672" category="section-title">获得云提供商文件服务支持</block>
   <block id="f6185bb12f5e53c800be8cda7fbca65b" category="paragraph">有关与云提供商文件服务、其基础架构或使用该服务的任何解决方案相关的技术支持、请参阅该产品的BlueXP文档中的"获得帮助"。</block>
   <block id="3880ae5df9fdc4d0fc4a6d00a2239530" category="paragraph">要获得针对BlueXP及其存储解决方案和服务的技术支持、请使用下面所述的支持选项。</block>
+  <block id="f8c50cec8b281b2a3e589464e5dfba35" category="list-text">在vmc.vmware.com控制台上、打开防火墙端口、以允许计算网关公共IP通过TCP 443与管理网络上的vCenter进行通信。</block>
+  <block id="6bfaca7cf08b162bbacdc9479a2ca693" category="list-text">在AWS控制台上、您必须更新正在运行FSx for ONTAP的VPC的安全组、以允许VM的BlueXP备份和恢复访问FSx for ONTAP。</block>
+  <block id="852604ac38f959dae2ec3b3009d3fc07" category="paragraph">要保护虚拟机上的VM和数据存储库、您必须为VM部署BlueXP备份和恢复。</block>
+  <block id="ebfc4f565cf4b541e8d94e4baad23f9f" category="list-text">您必须已在与vCenter相同的时区为VM部署BlueXP备份和恢复。</block>
 </blocks>

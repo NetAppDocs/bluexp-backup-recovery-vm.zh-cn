@@ -31,4 +31,6 @@ VM和VMC的BlueXP备份和恢复应使用相同的时区。备份计划在为VM�
 
 
 
+* 在vmc.vmware.com控制台上、打开防火墙端口、以允许计算网关公共IP通过TCP 443与管理网络上的vCenter进行通信。
+* 在AWS控制台上、您必须更新正在运行FSx for ONTAP的VPC的安全组、以允许VM的BlueXP备份和恢复访问FSx for ONTAP。
 
