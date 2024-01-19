@@ -1,0 +1,29 @@
+---
+permalink: task-unmount-datastores.html 
+sidebar: sidebar 
+keywords: mount, datastores 
+summary: 卸载数据存储库将删除主机对存储的访问权限。 
+---
+= 卸载数据存储库
+:allow-uri-read: 
+:experimental: 
+:icons: font
+:imagesdir: ./media/
+
+
+[role="lead"]
+如果您不再需要访问数据存储库中的文件，则可以卸载备份。
+
+.步骤
+. 在VMware vSphere客户端中、导航到 image:menu_icon.png[""] >*库存*>*存储*。
+. 在左侧导航器窗格中、右键单击某个数据存储库、然后在下拉列表中选择*虚拟机的BlueXP备份和恢复*、并在二级下拉列表中选择*卸载*。
++
+
+NOTE: 请确保选择正确的数据存储库以卸载。否则，您可能会对生产工作产生发生原因影响。
+
+. 在*卸载备份*对话框中，选择一个数据存储库，选中*卸载数据存储库*复选框，然后单击*卸载*。
+. 可选：要验证数据存储库是否已卸载、请在VMware vSphere客户端工具栏中单击*适用于VMS*的BlueXP备份和恢复。
++
+卸载的数据存储库将显示在信息板的*近期作业活动*图块中。
+
+

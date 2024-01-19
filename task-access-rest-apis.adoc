@@ -1,0 +1,44 @@
+---
+permalink: task-access-rest-apis.html 
+sidebar: sidebar 
+keywords: access REST APIs, REST APIs 
+summary: 执行以下步骤可访问REST API。 
+---
+= 使用 Swagger API 网页访问 REST API
+:allow-uri-read: 
+:icons: font
+:imagesdir: ./media/
+
+
+[role="lead"]
+REST API 通过 Swagger 网页公开。您可以访问Swagger网页以显示VM REST API的BlueXP备份和恢复。
+
+.开始之前
+对于VM REST API的BlueXP备份和恢复、您必须知道VM设备的BlueXP备份和恢复的IP地址或主机名。
+
+
+NOTE: 此插件仅支持用于与第三方应用程序集成的 REST API ，不支持 PowerShell cmdlet 或 CLI 。
+
+.步骤
+. 在浏览器中，输入 URL 以访问插件 Swagger 网页：
++
+https://<OVA_IP>/api/swagger-ui/index.html[]
+
++
+
+NOTE: 请勿在 REST API URL 中使用以下字符： + ，。， % 和 & 。
+
++
+* 示例 *
+
++
+访问适用于VM REST API的BlueXP备份和恢复：
+
++
+https://<OVA_IP>/api/swagger-ui/index.html[]
+
++
+登录使用vCenter身份验证机制生成令牌。
+
+. 单击 API 资源类型可显示该资源类型的 API 。
+

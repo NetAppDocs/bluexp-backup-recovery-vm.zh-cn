@@ -25,19 +25,14 @@
   <block id="8e76505b54822d8003db9695ebc8dded" category="doc">为 VM 和数据存储库创建备份策略</block>
   <block id="271beae8f11b01c3f45767fc1bd5c1a9" category="list-text">您必须已阅读前提条件。</block>
   <block id="020c68712d58d0c6ae79d6422851ae45" category="list-text">您必须已配置二级存储关系。</block>
-  <block id="06e3c2a5372f8d3d86877d169badf325" category="list-text">如果要将 Snapshot 副本复制到镜像或存储二级存储，则必须配置关系，并且 SnapCenter 管理员必须已为源卷和目标卷分配 Storage VM 。</block>
   <block id="fe693831347b037af8a5d8babd163c2e" category="list-text">要在NFS数据存储库上成功将Snapshot副本传输到二级存储以建立Version-FlexithleMirror关系、请确保SnapMirror策略类型为异步镜像、并已选中"all_ssource_SnapMirror"选项。</block>
   <block id="b3f67a94ed7b9ba31bd2698489179f27" category="list-text">当二级存储(镜像存储)上的Snapshot副本数量达到最大限制时、在备份操作中注册备份并应用保留的活动将失败、并显示以下错误：此Snapshot副本当前正由一个或多个SnapMirror关系用作参考Snapshot副本。删除Snapshot副本可能会使发生原因未来的SnapMirror操作失败。</block>
   <block id="7cb7ec638ee3f628b5dd7b29b735054f" category="paragraph">要更正此问题描述，请为二级存储配置 SnapMirror 保留策略，以避免达到 Snapshot 副本的最大限制。</block>
   <block id="afb53cfa3120d45d1a3d76236dda1012" category="list-text">如果您希望进行VM一致的备份、则必须安装并运行VMware工具。需要使用VMware工具来使VM处于静噪状态。</block>
   <block id="1b29ba4e6cf39ab8317f76076c2baeed" category="list-text">在虚拟机BlueXP备份和恢复的左侧导航器窗格中、单击*策略*。</block>
-  <block id="2be9030b1634912139eaab40b3092dce" category="list-text">在*Policies*页上，单击*Cree*启动向导。
-<block ref="906916a1f3ea00481784d2dcf7dafe3d" category="inline-image-macro-rx" type="image"></block></block>
   <block id="f9537d47a4839ca02a4ca9726157e701" category="list-text">在*新备份策略*页面上、选择AWS上要使用此策略的VMC、然后输入策略名称和问题描述。</block>
   <block id="9efc9e0c08da510b5195bb9dc4b1b7c2" category="list-text">不支持的字符</block>
   <block id="69a02b2d668a0ebee1d9ac100a00074c" category="paragraph">请勿在虚拟机，数据存储库，集群，策略，备份， 或资源组名称： % &amp; * $ # @ ！\ / ： * ？" &lt; &gt;-| ； " ，。</block>
-  <block id="9269e051e7bd31dcb56553a7f11183a2" category="paragraph">允许使用下划线字符（ _ ）。
-<block ref="6648fd21234a7ed16d280775be5d73d3" category="inline-image-macro-rx" type="image"></block></block>
   <block id="a923c6bf503ee78e9fc4b4479248cff6" category="list-text">指定保留设置。</block>
   <block id="2eff7650afc7423cc6df7c21eaaf0430" category="paragraph">如果计划启用 SnapVault 复制，则应将保留数量设置为 2 个或更多备份。如果将保留计数设置为 1 个要保留的备份，则保留操作可能会失败。这是因为在将较新的 Snapshot 副本复制到目标之前，第一个 Snapshot 副本是 SnapVault 关系的参考 Snapshot 副本。</block>
   <block id="6e0b19728555d1c2b7bc98ce7895aced" category="list-text">指定频率设置。</block>
@@ -48,7 +43,6 @@
   <block id="fa23470db7b9905492d6e4cdd14b03e5" category="paragraph">备份后更新 SnapMirror</block>
   <block id="a7352564cfc3174fc18763ada4c4e33e" category="paragraph">选择此选项可在与主备份卷具有 SnapMirror 关系的另一个卷上创建备份集的镜像副本。
 如果卷配置了镜像 - 存储关系，则如果要将备份复制到镜像 - 存储目标，则只能选择 * 备份后更新 SnapVault * 选项。</block>
-  <block id="449ebe6b7b153c1de3b22c54152f11dd" category="paragraph">适用于 VMware vSphere 4.5 及更高版本的 SnapCenter 插件中的 FlexGroup 卷中的数据存储库支持此选项。</block>
   <block id="05c92158f412c4a911e0b21a09762bf2" category="paragraph">备份后更新 SnapVault</block>
   <block id="7f7a2015d521bd1848a92d266cd3fae5" category="paragraph">选择此选项可在与主备份卷具有 SnapVault 关系的另一个卷上执行磁盘到磁盘备份复制。</block>
   <block id="ec9a0601ee927cc668ce79eac801b520" category="paragraph">如果为卷配置了镜像 - 存储关系，则只有在需要将备份复制到镜像 - 存储目标时，才必须选择此选项。</block>
@@ -60,12 +54,10 @@ Snapshot 标签有助于将使用此策略创建的快照与二级存储系统�
   <block id="a7ef08fff5cdd9899a1574f69f5c4428" category="paragraph">虚拟机一致性</block>
   <block id="c5622748b0dae394073783566c4253de" category="paragraph">选中此框可在每次运行备份作业时暂停 VM 并创建 VMware 快照。</block>
   <block id="5fe139943a50a82fa435d79d3988038a" category="paragraph">要执行虚拟机一致的备份、必须在虚拟机上运行VMware工具。如果 VMware Tools 未运行，则会执行崩溃状态一致的备份。</block>
-  <block id="d619892da7c9e176ad3a4bb3414fcef1" category="paragraph">选中 VM 一致性复选框后，备份操作可能需要更长时间并需要更多存储空间。在这种情况下， VM 会先暂停，然后 VMware 执行 VM 一致的快照，然后 SnapCenter 执行其备份操作，最后恢复 VM 操作。</block>
   <block id="fe8e8bb4e4841e4b613a335eb4397fa6" category="paragraph">VM 子系统内存不包括在 VM 一致性 Snapshot 中。</block>
   <block id="5b5f807a09f098321a7b30d765219c05" category="paragraph">包括具有独立磁盘的数据存储库</block>
   <block id="495ad64d2a6a40cfac27d689d4edd34b" category="paragraph">选中此框可在备份中包含包含临时数据的任何具有独立磁盘的数据存储库。</block>
   <block id="a83f1ca5ad00b39773d9e6a26b0e70b2" category="paragraph">脚本</block>
-  <block id="38e0c62f029f528b565802759f84d383" category="paragraph">输入希望 SnapCenter VMware 插件在备份操作前后运行的预处理程序或后脚本的完全限定路径。例如，您可以运行脚本来更新 SNMP 陷阱，自动执行警报和发送日志。执行脚本时会验证脚本路径。</block>
   <block id="7e3f0e5af0f3deb2b599c2b06c202c37" category="paragraph">预处理脚本和后处理脚本必须位于虚拟设备虚拟机上。要输入多个脚本、请在每个脚本路径后按Enter键、以便在单独的行中列出每个脚本。不允许使用字符 " ； " 。</block>
   <block id="0e966e38f37db4fe0a9b1d6f014e044c" category="paragraph">您可以通过在策略页面中选择策略来验证是否已创建策略并查看策略配置。</block>
   <block id="0a5120b477a12d0b58555a4a46c5269c" category="summary">不支持的工作流</block>
@@ -213,12 +205,10 @@ Snapshot 标签有助于将使用此策略创建的快照与二级存储系统�
   <block id="8ced16f68a9710f544fa07b75b031531" category="list-text">AWS上的每个VMC都应与一个单独的适用于VM的BlueXP备份和恢复实例配对。</block>
   <block id="a0b8712c405e33c495bcbf0f2430f84e" category="list-text">虚拟机的每个BlueXP备份和恢复实例都必须部署为一个单独的Linux虚拟机。</block>
   <block id="25950cd6c2e7c3d5805a7155cfa39e2a" category="paragraph">例如、如果要从AWS上的六个不同VMC实例执行备份、则必须在六个主机上为VM实例部署六个BlueXP备份和恢复、并且AWS上的每个VMC都必须与一个唯一的VM BlueXP备份和恢复实例配对。</block>
-  <block id="2aa21a5ffa0dab32f9fd25622fcf534d" category="summary">适用于VM的BlueXP备份和恢复是一个独立的虚拟设备(开放式虚拟设备格式)、可为基于AWS的VMware Cloud和适用于NetApp ONTAP的Amazon FSx上的VM和数据存储库提供数据保护服务。您可以使用适用于VM的BlueXP备份和恢复功能备份数据存储库并将虚拟机还原到其原始位置。</block>
   <block id="26a15d7986f1607a9f7daa4efd926c80" category="doc">适用于Amazon FSx上虚拟机的BlueXP备份和恢复</block>
   <block id="f5eab3d317d6c4d95063c4bb5c161509" category="list-text">您只能在Amazon FSx上备份NFS类型的数据存储库。</block>
   <block id="2efffbafe41056b8a16eaa739e9b56e7" category="list-text">要备份NFS数据存储库、您应运行ONTAP 9.10或更高版本。</block>
   <block id="32b36f1d8e8c3d59e6463ae39985c79f" category="list-text">VMware Cloud具有预定义的"CloudAdmin"角色。CloudAdmin角色具有创建和管理SDDC工作负载以及存储策略、内容库、vSphere标记和资源池等相关对象所需的权限。</block>
-  <block id="94cc43cd13438a1a44297fe4d9e5a397" category="list-text">您可以将VM和VMDK还原到其当前位置(就地还原)。</block>
   <block id="243263104c829e77835d632f591230d5" category="summary">在向NetApp技术支持部门创建支持案例之前、您需要向BlueXP添加一个NetApp 支持站点 帐户、然后注册获取支持。</block>
   <block id="42748df9eaa0be17ddc5cc1593cf57ab" category="doc">注册以获得支持</block>
   <block id="0b0e252af8897fbe981ec6682d2aa33b" category="section-title">支持注册概述</block>
@@ -305,8 +295,6 @@ Snapshot 标签有助于将使用此策略创建的快照与二级存储系统�
   <block id="14526abd8bda5af347775025cd5342cf" category="inline-link">社区</block>
   <block id="410fdb9caa9c64da2ff3f88f4836960d" category="list-text"><block ref="410fdb9caa9c64da2ff3f88f4836960d" category="inline-link-rx"></block></block>
   <block id="00c5fef3bb9d593ae96bf5d2ee60354a" category="paragraph">加入BlueXP社区、关注正在进行的讨论或创建新的讨论。</block>
-  <block id="80b1b0d2b1ebf2b3cba2d25759801afd" category="list-text">mailto ： ng-cloudmanager-feedback@netapp.com （反馈电子邮件）</block>
-  <block id="6702efec14563f45f1ee2f8c613b8ad8" category="paragraph">我们非常重视您的反馈意见。提交反馈以帮助我们改进BlueXP。</block>
   <block id="d88bacf2a9fdcbbc844edcba97c34e30" category="section-title">向NetApp支持部门创建案例</block>
   <block id="82812db645b6ff5e9c2a24ddfb66c8d6" category="paragraph">除了上述自助支持选项之外、您还可以在激活支持后与NetApp支持专家合作解决任何问题。</block>
   <block id="8fece025a1a8fef7018449bf104a2527" category="list-title">开始之前</block>
@@ -391,18 +379,14 @@ Snapshot 标签有助于将使用此策略创建的快照与二级存储系统�
   <block id="53cfd56b3608a4ed4c03e8e0c5caae45" category="paragraph">您无法还原数据存储库、但可以还原数据存储库中的任何虚拟机。</block>
   <block id="6d7ec4cee1b0c4e3059a9c3d8bb71046" category="list-text">虚拟机的VMware一致性快照失败。</block>
   <block id="45ece8b1113e383b0e7e2917cb3d88a5" category="paragraph">即使虚拟机的VMware一致性快照发生故障、也会备份该虚拟机。您可以在还原向导中查看备份副本中包含的实体，并将其用于还原操作。</block>
-  <block id="a638ca591549f6494bfb64fca964731b" category="list-text">在VMware vSphere Web Client GUI中，单击工具栏中的*菜单*，单击*清单*，然后选择*虚拟机和模板*。</block>
-  <block id="c22f3159395e7ce6c9a8b604106623f7" category="list-text">在左侧导航器窗格中，右键单击一个*Virtual Machine*，然后在NetApp下拉列表中选择*Cloud Backup*，然后选择*Restore*以启动向导。</block>
   <block id="de43308fec906273acd64a6aed609cb8" category="list-text">在 * 还原 * 向导的 * 选择备份 * 页面上，选择要还原的备份 Snapshot 副本。</block>
   <block id="43bf8720e765e5ec5249782941ceb574" category="paragraph">您可以搜索特定备份名称或部分备份名称，也可以通过单击筛选器图标并选择日期和时间范围，选择是否要包含 VMware Snapshot 的备份，是否要挂载备份以及位置来筛选备份列表。单击 * 确定 * 以返回到向导。</block>
-  <block id="664749414cf1bca3f1fd4f2bfac452d3" category="list-text">在*选择范围*页面上，在*还原范围*字段中选择*整个虚拟机*，然后选择还原位置，并输入应挂载备份的目标ESXi信息。</block>
   <block id="9d7f2f9bd72cb1eb66d906abadf682b1" category="paragraph">还原部分备份时，还原操作会跳过 * 选择范围 * 页面。</block>
   <block id="4a501b597bd4167c209d8bdff7aa576e" category="list-text">如果要在还原操作后启动虚拟机，请启用*Restart VM*复选框。</block>
   <block id="de179e769f37bceb37b99454fcd0fc9f" category="list-text">在 * 选择位置 * 页面上，选择已还原数据存储库的位置。</block>
   <block id="fca1924bee8a7a6fbfd8c512efe56373" category="list-text">查看“*摘要*”页，然后单击“*完成*”。</block>
   <block id="ba4e58f4bc0a74931646cad754c7a04b" category="list-text">*可选*：单击屏幕底部的*近期任务*来监视操作进度。</block>
   <block id="5fc34c96a53e88e10cd1df77a72005f4" category="list-text">将已还原的虚拟机添加到资源组。</block>
-  <block id="a1c0ec7f7265d7d6dfdfe38fee9792ba" category="paragraph">尽管虚拟机已还原、但它们不会自动添加到以前的资源组中。因此、您必须手动将已还原的虚拟机添加到相应的资源组。</block>
   <block id="a6fc5033cd7d2f5d0e979c35a6273cb2" category="sidebar">适用于VM的BlueXP备份和恢复是一个独立的虚拟设备(开放式虚拟设备格式)、可为基于AWS的VMware Cloud和适用于NetApp ONTAP的Amazon FSx上的VM和数据存储库提供数据保护服务。</block>
   <block id="be11c74c1dd7f307bb80183a90dc2067" category="sidebar">入门</block>
   <block id="d371b3e46ec1452b89412f2da008cb64" category="sidebar">了解适用于VM的BlueXP备份和恢复</block>
@@ -456,4 +440,108 @@ Snapshot 标签有助于将使用此策略创建的快照与二级存储系统�
   <block id="6bfaca7cf08b162bbacdc9479a2ca693" category="list-text">在AWS控制台上、您必须更新正在运行FSx for ONTAP的VPC的安全组、以允许VM的BlueXP备份和恢复访问FSx for ONTAP。</block>
   <block id="852604ac38f959dae2ec3b3009d3fc07" category="paragraph">要保护虚拟机上的VM和数据存储库、您必须为VM部署BlueXP备份和恢复。</block>
   <block id="ebfc4f565cf4b541e8d94e4baad23f9f" category="list-text">您必须已在与vCenter相同的时区为VM部署BlueXP备份和恢复。</block>
+  <block id="f96fc24033e8d605c26d6a193ece4735" category="summary">卸载数据存储库将删除主机对存储的访问权限。</block>
+  <block id="39d50f244e1868cb8a2b803c9636bc01" category="doc">卸载数据存储库</block>
+  <block id="3cd20156fa10057c7f84a9e13d691b32" category="paragraph">如果您不再需要访问数据存储库中的文件，则可以卸载备份。</block>
+  <block id="c4b336e25d1d76223f7be8ec67116ae1" category="list-text">在VMware vSphere客户端中、导航到 <block ref="2c7a3a063e070bff2c7013040c629ab6" category="inline-image-macro-rx" type="image"></block> &gt;*库存*&gt;*存储*。</block>
+  <block id="ea4aa728420cdbc4e91f43d8f208a387" category="list-text">在左侧导航器窗格中、右键单击某个数据存储库、然后在下拉列表中选择*虚拟机的BlueXP备份和恢复*、并在二级下拉列表中选择*卸载*。</block>
+  <block id="e68d40414316869d2023656b071a3cc1" category="admonition">请确保选择正确的数据存储库以卸载。否则，您可能会对生产工作产生发生原因影响。</block>
+  <block id="d037dda36a87414a61863f9819373352" category="list-text">在*卸载备份*对话框中，选择一个数据存储库，选中*卸载数据存储库*复选框，然后单击*卸载*。</block>
+  <block id="2d0f1b3171ada6a708622495820dc6ca" category="list-text">可选：要验证数据存储库是否已卸载、请在VMware vSphere客户端工具栏中单击*适用于VMS*的BlueXP备份和恢复。</block>
+  <block id="2c93911421766329f252684e3f3e6a9a" category="paragraph">卸载的数据存储库将显示在信息板的*近期作业活动*图块中。</block>
+  <block id="d6c2cf7a5e232dbc0143ea4754644660" category="paragraph">您可以将 VM 还原到以下位置：</block>
+  <block id="abfc7c0c366258e23e15cd12a5f89811" category="list-text">还原到原始位置</block>
+  <block id="b14e0e0fe870958315bd1b702bfa088a" category="list-text">挂载到原始 ESXi 主机上的原始数据存储库（此操作会覆盖原始虚拟机）</block>
+  <block id="25e66e51214e8342374fa891a42988b3" category="list-text">还原到备用位置</block>
+  <block id="de3711ff558e3312b6d68350183b2c3f" category="list-text">挂载到原始 ESXi 主机上的其他数据存储库</block>
+  <block id="bed9956f25b8fb4ba78345f151a537d8" category="list-text">挂载到由同一 vCenter 管理的其他 ESXi 主机上的原始数据存储库</block>
+  <block id="27657d207d680aabbb0436d2a26f9fb5" category="list-text">挂载到由同一 vCenter 管理的不同 ESXi 主机上的其他数据存储库</block>
+  <block id="f3e1d3164ec8218a6bb15fb425baca03" category="list-text">挂载在其他 ESXi 主机上的另一个数据存储库，该主机由其他 vCenter 以链接模式管理</block>
+  <block id="64fc816481e420ca3dd15e834108d01c" category="list-text">在VMware vSphere客户端工具栏中、单击*主机和群集*、然后选择存储系统。</block>
+  <block id="b7604f0251d8cb7b20bb46387d4fa112" category="list-text">在左侧导航器窗格中，右键单击一个*Virtual Machine*，然后在下拉列表中选择*VMS*的BlueXP备份和恢复，然后选择*Restore*以启动向导。</block>
+  <block id="5fcf3e820d970b3b51da55a74053bff4" category="list-text">在*选择范围*页面上，在*恢复范围*字段中选择*整个虚拟机*，然后选择恢复位置，并输入应挂载备份的目标信息。</block>
+  <block id="d1b4b1cd20ab56951a39c9cd9ce19c90" category="paragraph">在虚拟机名称字段中、如果存在相同的虚拟机名称、则新的虚拟机名称格式为&lt;vm_name&gt;&lt;timestamp&gt;。</block>
+  <block id="877b234cb8dde57dd3552ee0fa6dd068" category="paragraph">确保新还原的虚拟机受到保护。否则、请手动将已还原的虚拟机添加到相应的资源组中、以保护虚拟机。</block>
+  <block id="3033609d5306603608d735baccf4bd2b" category="list-text">如果要将Snapshot副本复制到镜像或存储二级存储、则必须配置关系、并且必须注册源卷和目标卷的存储系统。</block>
+  <block id="8878994197a1eb014f3822817736fcb9" category="list-text">在*Policies*页上，单击*Cree*启动向导。</block>
+  <block id="906916a1f3ea00481784d2dcf7dafe3d" category="paragraph"><block ref="906916a1f3ea00481784d2dcf7dafe3d" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="a051f3eeac4a83ec1f5d55c7aeba6f06" category="paragraph">允许使用下划线字符（ _ ）。</block>
+  <block id="6648fd21234a7ed16d280775be5d73d3" category="paragraph"><block ref="6648fd21234a7ed16d280775be5d73d3" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="22ddbe0d13874b1cf1816994bfb92854" category="list-text">如果不希望Snapshot被篡改，请启用*Snapshot Locking*并指定锁定期限。</block>
+  <block id="4407de106f219fb35e16ce58d30ce466" category="paragraph">选中 VM 一致性复选框后，备份操作可能需要更长时间并需要更多存储空间。在这种情况下、首先暂停VM、然后VMware执行VM一致的快照、然后为VM执行BlueXP备份和恢复操作、最后恢复VM操作。</block>
+  <block id="aa187ea824295bae24279cd87aa6279e" category="paragraph">输入要在备份操作前后对VM运行BlueXP备份和恢复的规定或后处理脚本的完全限定路径。例如，您可以运行脚本来更新 SNMP 陷阱，自动执行警报和发送日志。执行脚本时会验证脚本路径。</block>
+  <block id="eea84aa4972695e692e8e0af29506317" category="section-title">2024年1月18日</block>
+  <block id="c454b492adb20af990d3eb80d9725024" category="section-title">对VM的BlueXP备份和恢复进行了增强</block>
+  <block id="88296380f7b22200bdb3a792027dbfba" category="paragraph">以下是在适用于VM 1.1的BlueXP备份和恢复中支持的功能：</block>
+  <block id="20573cc6d2bbd67be6c8a0862fe019b1" category="list-text">将虚拟机还原到备用位置</block>
+  <block id="e6c57d58792f45f044a6326df3ec9b9a" category="list-text">启用Snapshot锁定以确保Snapshot副本在指定时间之前不会被篡改。</block>
+  <block id="e69ce0a516b6d7c2380f82c696ffdc01" category="summary">适用于VM的BlueXP备份和恢复是一个独立的虚拟设备(开放式虚拟设备格式)、可为基于AWS的VMware Cloud和适用于NetApp ONTAP的Amazon FSx上的VM和数据存储库提供数据保护服务。您可以使用适用于VM的BlueXP备份和恢复功能备份数据存储库、并将虚拟机和虚拟机磁盘还原到其原始/备用位置。</block>
+  <block id="e5b0b42f445b647df62d6e378f8c71ec" category="list-text">您可以将VM和VMDK还原到其当前/备用位置。</block>
+  <block id="03a12a6e6ba231b7d5d26aa91ab1c483" category="summary">挂载数据存储库可使主机能够访问存储。</block>
+  <block id="465833e93b7ab22dbb9e82189b3e9e87" category="doc">挂载数据存储库</block>
+  <block id="e9556d2cd2c6ff28b597944a3b785e8e" category="paragraph">如果要访问备份中的文件，可以从备份挂载数据存储库。</block>
+  <block id="2a38ae4c83d289abb42511affbb07bf4" category="list-text">确保从VMC门户复制组织ID和API令牌、并将其添加到VMware云服务设置中。</block>
+  <block id="482372f5186290234c8109307262c7be" category="list-text">确保备用 ESXi 主机可以连接到存储</block>
+  <block id="cec76647343575fe6b9cf1128e302531" category="paragraph">如果要挂载到备用ESXi主机、则必须确保备用ESXi主机可以连接到存储、并且具有与原始主机相同的UID和GID。</block>
+  <block id="36ac03001da28a77e53d1f4a7952232b" category="list-text">在左侧导航器窗格中，右键单击某个数据存储库，然后在下拉列表中选择*VMS*的BlueXP备份和恢复，然后在二级下拉列表中选择*Mount Backup*。</block>
+  <block id="4c0655114e99963e8ddb74fda03d0cfd" category="list-text">在*挂载数据存储库*页面上、选择备份和备份位置(主或二级)、然后单击*挂载*。</block>
+  <block id="455924390ea1901df9e61972f8625d0b" category="list-text">可选：要验证数据存储库是否已挂载、请在VMware vSphere客户端工具栏中单击*适用于VMS*的BlueXP备份和恢复。</block>
+  <block id="e5310669f868395e66162957e92eca88" category="paragraph">您挂载的数据存储库将显示在信息板的*近期作业活动*图块中。</block>
+  <block id="88beb2e51cd0b895e36e8a71f5ddd38c" category="paragraph">要防止在克隆卷时创建新的 Snapshot 副本，请关闭 SnapVault 卷的 ONTAP 计划。不会删除以前存在的 Snapshot 副本。</block>
+  <block id="dcf94d150ec9b7aa351d3e16a1ec3ba4" category="summary">执行以下步骤可访问REST API。</block>
+  <block id="aba5f0a683edf4f29d2940f278f2d102" category="doc">使用 Swagger API 网页访问 REST API</block>
+  <block id="968e6c7f8992185c40c92b74c5a315cf" category="paragraph">REST API 通过 Swagger 网页公开。您可以访问Swagger网页以显示VM REST API的BlueXP备份和恢复。</block>
+  <block id="f3ec2c5138898d84ec08804d9dcdd9ad" category="paragraph">对于VM REST API的BlueXP备份和恢复、您必须知道VM设备的BlueXP备份和恢复的IP地址或主机名。</block>
+  <block id="061c36e9d3e7d9f981cf79561c7144ed" category="admonition">此插件仅支持用于与第三方应用程序集成的 REST API ，不支持 PowerShell cmdlet 或 CLI 。</block>
+  <block id="52db7b85d2725f40516c0dbc0da17ca6" category="list-text">在浏览器中，输入 URL 以访问插件 Swagger 网页：</block>
+  <block id="072db018962874e15c5db8115caf16b2" category="paragraph"><block ref="a0238ff2a353c960ac459ebcb9a9ea42" category="inline-link-rx"></block></block>
+  <block id="b8ae0b462402a081bf316840fb878f9e" category="admonition">请勿在 REST API URL 中使用以下字符： + ，。， % 和 &amp; 。</block>
+  <block id="938f1047c15f00fdd0cbfc8e4cfa15e1" category="paragraph">* 示例 *</block>
+  <block id="7279be9bb03d1390b3ea8dfa85feb320" category="paragraph">访问适用于VM REST API的BlueXP备份和恢复：</block>
+  <block id="80ad72a4cb203d4379ce7f08e911bc19" category="paragraph"><block ref="2c783b3b5dbe20b878f13c43894996ce" category="inline-link-rx"></block></block>
+  <block id="a23affc3c3582aef164dcc126289abc5" category="paragraph">登录使用vCenter身份验证机制生成令牌。</block>
+  <block id="9ce66f05fe7909f94e1823660b617ddf" category="list-text">单击 API 资源类型可显示该资源类型的 API 。</block>
+  <block id="e25f9b9a6d51c291f229ba4ce1ef934b" category="summary">将一个或多个VMDK附加到虚拟机。</block>
+  <block id="7da61cf8aa5a3e11b9b2b76cf8de6c2b" category="doc">将 VMDK 连接到虚拟机</block>
+  <block id="6d2c0b899729f6fc65bb750388bf7304" category="paragraph">您可以将一个或多个 VMDK 从备份连接到父虚拟机，同一 ESXi 主机上的备用虚拟机，或者连接到由同一 vCenter 或不同 vCenter 以链接模式管理的备用 ESXi 主机上的备用虚拟机。</block>
+  <block id="45a22ef9ae5f0580d5230dd9bc8f0c63" category="paragraph">这样可以更轻松地从驱动器还原一个或多个单个文件，而不是还原整个驱动器。您可以在还原或访问所需文件后断开 VMDK 。</block>
+  <block id="ef4f40abdcac7cd05cedfa75a38ecb05" category="paragraph">您可以使用以下连接选项：</block>
+  <block id="3bd14151460ab96902cfa334d8e5b073" category="list-text">您可以从主备份或二级备份连接虚拟磁盘。</block>
+  <block id="756f4f9493de655e73ea3ceedd07bf51" category="list-text">您可以将虚拟磁盘连接到父虚拟机（与虚拟磁盘最初关联的同一个虚拟机）或同一 ESXi 主机上的备用虚拟机。</block>
+  <block id="8d3d48b6a47491763c9812ffa0ff2048" category="paragraph">以下限制适用于连接虚拟磁盘：</block>
+  <block id="19e4cacb6df1b0170d26c2a90c4be6b0" category="list-text">虚拟机模板不支持连接和断开操作。</block>
+  <block id="2efd02ae05ecf109e4f1c3753ec07584" category="list-text">如果连接到iSCSI控制器的VMDK超过15个、则由于VMware的限制、用于VM BlueXP备份和恢复的虚拟机无法找到大于15的VMDK单元号。</block>
+  <block id="0a1c13cb7f3a6f85002911ef724d47ba" category="paragraph">在这种情况下，请手动添加 SCSI 控制器，然后重试连接操作。</block>
+  <block id="02067153d760664147d364495bc1d86d" category="list-text">连接和还原操作使用默认 SCSI 控制器连接 VMDK 。连接到使用 NVMe 控制器的虚拟机的 VMDK 会进行备份，但对于连接和还原操作，它们会使用 SCSI 控制器重新连接。</block>
+  <block id="278e4864ce5f71db27c5e68928088836" category="list-text">在VMware vSphere客户端中、导航到 <block ref="2c7a3a063e070bff2c7013040c629ab6" category="inline-image-macro-rx" type="image"></block> &gt;*清单*&gt;*主机和群集*。</block>
+  <block id="bcedd2e314a87392acbcde7ec5b98fbb" category="list-text">在左侧导航器窗格中，右键单击一个*Virtual Machine*，然后在下拉列表中选择*BlueXP备份和恢复VMs*，然后选择*attach Virtual Disk(s)(连接虚拟磁盘)*。</block>
+  <block id="5929be7ebf476e33b9ad3aea37fa87db" category="list-text">在连接虚拟磁盘窗口的*备份部分*中，选择一个备份。</block>
+  <block id="f29ee91ad0dce3a499c44ec0016398eb" category="paragraph">您可以通过以下方式筛选备份列表：选择筛选器图标、选择日期和时间范围、选择是否需要包含VMware Snapshot副本的备份、是否需要挂载备份以及位置。单击确定。</block>
+  <block id="775753d105c5c21b1080c5ea812205ff" category="list-text">在 * 选择磁盘 * 部分中，选择要连接的一个或多个磁盘以及要连接的位置（主磁盘或二级磁盘）。</block>
+  <block id="0ccbe2c092fc378c75aa9ebb7bd7d5ab" category="paragraph">您可以更改筛选器以显示主位置和二级位置。</block>
+  <block id="99721936171b079bed2194af73a3e943" category="list-text">默认情况下，选定虚拟磁盘会连接到父虚拟机。要将选定虚拟磁盘连接到同一ESXi主机中的备用虚拟机，请*单击此处连接到备用虚拟机*并指定备用虚拟机。</block>
+  <block id="2f80c7c6141a4d837c0d3b3d563d7ec1" category="list-text">单击 * 附加 * 。</block>
+  <block id="3a258a61f1abdb721cb6de8642d42eb3" category="list-text">可选：在 * 近期任务 * 部分中监控操作进度。</block>
+  <block id="14dae1427bcb2f84e900779dbbccd66f" category="paragraph">刷新屏幕以显示更新后的信息。</block>
+  <block id="c8d1e2af1ae3c89145fae7a06f3527d2" category="list-text">通过执行以下操作验证是否已连接虚拟磁盘：</block>
+  <block id="2b47e47a91e8d341f2ea5083a977170c" category="list-text">单击工具栏中的 * 菜单 * ，然后从下拉列表中选择 * 虚拟机和模板 * 。</block>
+  <block id="dd185a0a59b8b49a3a96be6de1271479" category="list-text">在左侧导航器窗格中，右键单击某个虚拟机，然后在下拉列表中选择 * 编辑设置 * 。</block>
+  <block id="53458ddf4cca411e8218b9e8a4d2abea" category="list-text">在 * 编辑设置 * 窗口中，展开每个硬盘的列表以查看磁盘文件列表。</block>
+  <block id="d179ad7e63e6982bb3ee3c16224d9dd1" category="paragraph">编辑设置页面列出了虚拟机上的磁盘。您可以展开每个硬盘的详细信息以查看连接的虚拟磁盘列表。</block>
+  <block id="6f629cc9e935a4af9aee9b4e5b3249df" category="paragraph">*结果*：
+您可以从主机操作系统访问连接的磁盘，然后从这些磁盘检索所需的信息。</block>
+  <block id="90c46daf091476d4abbd6c115c9d683f" category="summary">在对VM使用BlueXP备份和恢复之前、您应了解这些限制。</block>
+  <block id="482723983a4f2af954e36ff41e567451" category="doc">已知限制</block>
+  <block id="5d8aef9555e5438ddeff623786db2956" category="paragraph">已知限制用于说明此产品版本不支持的功能或无法与其正确交互的功能。仔细审查这些限制。</block>
+  <block id="47a0bf38b0e7cc54e0a0ff1bef23a9e7" category="list-text">适用于VM的BlueXP备份和恢复不支持使用Amazon FSx执行ONTAP的自动每日备份。</block>
+  <block id="a6c661857bb9faf4d1d2121855e170ac" category="list-text">最多可挂载四个数据存储库。</block>
+  <block id="8c5ce72a53d4aa7bc5c8cbb67cf764b1" category="list-text">如果启用了快照锁定、则VM的BlueXP备份和恢复会显示二级位置两次。此问题描述已在ONTAP 9.14.1RC1、ONTAP 9.13.1P4 - ONTAP 9.13.1P5和ONTAP 9.12.1P8 - ONTAP 9.12.1P9中得到修复。</block>
+  <block id="656b1941061949fe21d495b2d2fa4764" category="doc">断开虚拟磁盘</block>
+  <block id="6fc948db6bfb5ca3b3b32b543334051c" category="paragraph">在连接虚拟磁盘以还原单个文件后，您可以将虚拟磁盘与父虚拟机断开。</block>
+  <block id="ab952ab9a747427147b3f05f314b597d" category="list-text">在左侧导航器窗格中，右键单击一个*Virtual Machine*，然后在下拉列表中选择*BlueXP备份和恢复VM*，然后选择*Detach Virtual Disk(s)(断开虚拟磁盘)*。</block>
+  <block id="22a57baae518fd2d4ed143d6b95d5f38" category="list-text">在*Detach Virtual Disk*(断开虚拟磁盘*)对话框中，选择要断开的一个或多个磁盘，然后选中*Detach the selected disk(s)*(断开选定磁盘*)复选框，并单击*Detach*。</block>
+  <block id="bbdcfd9257f4afda91a64894f3ae3263" category="list-text">通过执行以下操作验证虚拟磁盘是否已断开：</block>
+  <block id="fa8d7e4bdd9c439bca012f3548cbda0b" category="sidebar">保护Oracle和MS®SQL工作负载</block>
+  <block id="33871b6190a8d5adbe8b15282054766c" category="sidebar">新增功能</block>
+  <block id="56221c5b2b531b839a3cd5c7e9c9cd9f" category="sidebar">访问REST API</block>
 </blocks>

@@ -1,0 +1,36 @@
+---
+permalink: task-mount-datastores.html 
+sidebar: sidebar 
+keywords: mount, datastores 
+summary: 挂载数据存储库可使主机能够访问存储。 
+---
+= 挂载数据存储库
+:allow-uri-read: 
+:experimental: 
+:icons: font
+:imagesdir: ./media/
+
+
+[role="lead"]
+如果要访问备份中的文件，可以从备份挂载数据存储库。
+
+.开始之前
+* 确保从VMC门户复制组织ID和API令牌、并将其添加到VMware云服务设置中。
+* 确保备用 ESXi 主机可以连接到存储
++
+如果要挂载到备用ESXi主机、则必须确保备用ESXi主机可以连接到存储、并且具有与原始主机相同的UID和GID。
+
+
+
+.步骤
+. 在VMware vSphere客户端中、导航到 image:menu_icon.png[""] >*库存*>*存储*。
+. 在左侧导航器窗格中，右键单击某个数据存储库，然后在下拉列表中选择*VMS*的BlueXP备份和恢复，然后在二级下拉列表中选择*Mount Backup*。
+. 在*挂载数据存储库*页面上、选择备份和备份位置(主或二级)、然后单击*挂载*。
+. 可选：要验证数据存储库是否已挂载、请在VMware vSphere客户端工具栏中单击*适用于VMS*的BlueXP备份和恢复。
++
+您挂载的数据存储库将显示在信息板的*近期作业活动*图块中。
+
++
+要防止在克隆卷时创建新的 Snapshot 副本，请关闭 SnapVault 卷的 ONTAP 计划。不会删除以前存在的 Snapshot 副本。
+
+

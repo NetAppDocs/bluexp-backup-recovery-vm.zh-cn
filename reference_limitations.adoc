@@ -1,0 +1,19 @@
+---
+permalink: reference-limitations.html 
+sidebar: sidebar 
+keywords: limitations 
+summary: 在对VM使用BlueXP备份和恢复之前、您应了解这些限制。 
+---
+= 已知限制
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+已知限制用于说明此产品版本不支持的功能或无法与其正确交互的功能。仔细审查这些限制。
+
+* 适用于VM的BlueXP备份和恢复不支持使用Amazon FSx执行ONTAP的自动每日备份。
+* 最多可挂载四个数据存储库。
+* 如果启用了快照锁定、则VM的BlueXP备份和恢复会显示二级位置两次。此问题描述已在ONTAP 9.14.1RC1、ONTAP 9.13.1P4 - ONTAP 9.13.1P5和ONTAP 9.12.1P8 - ONTAP 9.12.1P9中得到修复。
+

@@ -12,7 +12,11 @@ sidebar:
   - title: 适用于VM的BlueXP备份和恢复文档
     url: "/index.html"
   - title: 发行说明
-    url: "/whats-new.html"
+    entries:
+    - title: 新增功能
+      url: "/whats-new.html"
+    - title: 已知限制
+      url: "/reference-limitations.html"
   - title: 入门
     entries:
     - title: 了解适用于VM的BlueXP备份和恢复
@@ -37,8 +41,22 @@ sidebar:
       url: "/task-create-resource-groups.html"
     - title: 按需备份资源组
       url: "/task-back-up-resource-groups-on-demand.html"
+  - title: 挂载和卸载数据存储库
+    entries:
+    - title: 挂载数据存储库
+      url: "/task-mount-datastores.html"
+    - title: 卸载数据存储库
+      url: "/task-unmount-datastores.html"
+  - title: 连接和断开 VMDK
+    entries:
+    - title: 将 VMDK 连接到虚拟机
+      url: "/task-attach-vmdks-vm.html"
+    - title: 断开虚拟磁盘
+      url: "/task-detach-virtual-disks.html"
   - title: 从Amazon FSx还原虚拟机
     url: "/task-restore-virtual-machines-from-amazon-fsx.html"
+  - title: 访问REST API
+    url: "/task-access-rest-apis.html"
   - title: 知识和支持
     entries:
     - title: 注册以获得支持

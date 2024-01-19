@@ -35,3 +35,5 @@ indexpage:
       url: https://www.youtube.com/watch?v=cLWOFm_3g3U
     - title: 还原ONTAP数据存储库VM和VMDK的FSx
       url: https://www.youtube.com/watch?v=RVLYP0lguxkM
+    - title: 保护Oracle和MS®SQL工作负载
+      url: https://community.netapp.com/t5/Tech-ONTAP-Blogs/Protect-Oracle-MS-SQL-workloads-using-NetApp-SnapCenter-in-VMware-Cloud-on-AWS/ba-p/449168
