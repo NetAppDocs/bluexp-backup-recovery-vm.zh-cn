@@ -1,5 +1,9 @@
 ---
 indexpage:
+  title: 适用于VM的BlueXP备份和恢复文档
+  summary: 适用于Amazon FSx上虚拟机的BlueXP备份和恢复。
+  keywords: bluexp backup and recovery for VMs documentation, Deploy, BlueXP, backup,
+    recovery, OVA, storage, Demos, tutorials
   lead: 适用于VM的BlueXP备份和恢复是一个独立的虚拟设备(开放式虚拟设备格式)、可为基于AWS的VMware Cloud和适用于NetApp ONTAP的Amazon
     FSx上的VM和数据存储库提供数据保护服务。
   tiles:
@@ -30,10 +34,10 @@ indexpage:
   - title: 演示和教程
     links:
     - title: 为VM安装BlueXP备份和恢复
-      url: https://www.youtube.com/watch?v=kCuKY0fBf5U
+      url: https://www.youtube.com/watch?v=senCAisw5VQ
     - title: 为ONTAP数据存储库和VM备份FSx
-      url: https://www.youtube.com/watch?v=cLWOFm_3g3U
+      url: https://www.youtube.com/watch?v=NUFRkfnhQNk
     - title: 还原ONTAP数据存储库VM和VMDK的FSx
-      url: https://www.youtube.com/watch?v=RVLYP0lguxkM
+      url: https://www.youtube.com/watch?v=Wk8q-vJ3TIg
     - title: 保护Oracle和MS®SQL工作负载
       url: https://community.netapp.com/t5/Tech-ONTAP-Blogs/Protect-Oracle-MS-SQL-workloads-using-NetApp-SnapCenter-in-VMware-Cloud-on-AWS/ba-p/449168
